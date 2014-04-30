@@ -9,12 +9,15 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+
 /**
  * Servlet implementation class LoginServlet
  */
 @WebServlet("/LoginServlet")
 public class LoginServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+	public static UserBean user = new UserBean();
+    public static HttpSession session;
 
        
     /**
@@ -30,6 +33,7 @@ public class LoginServlet extends HttpServlet {
 	 */
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, java.io.IOException 
     { 
+      
     	
       int test = Integer.parseInt( request.getParameter("st") );
       switch( test )
@@ -39,15 +43,15 @@ public class LoginServlet extends HttpServlet {
           System.out.println("Login Servlet");
           try 
           { 
-            UserBean user = new UserBean(); 
+            
             user.setUserName(request.getParameter("un")); 
-            user.setPassword(request.getParameter("pw")); 
             user = UserDAO.login(user); 
         
             if (user.isValid()) 
             { 
-              HttpSession session = request.getSession(true); 
-              session.setAttribute("currentSessionUser",user); 
+              session = request.getSession(true); 
+              session.setAttribute("currentSessionUser",user);
+              
               response.sendRedirect("userLogged.jsp"); 
               //logged-in page 
             } 
@@ -68,7 +72,7 @@ public class LoginServlet extends HttpServlet {
             System.out.println("Signup Servlet");	
             try 
             { 
-              UserBean user = new UserBean(); 
+               
               user.setUserName(request.getParameter("newUN")); 
               user.setRole(request.getParameter("Role")); 
               user.setAge( Integer.parseInt( request.getParameter("Age") ) );
@@ -77,13 +81,14 @@ public class LoginServlet extends HttpServlet {
           
               if (user.isValid()) 
               { 
-                HttpSession session = request.getSession(true); 
+                session = request.getSession(true); 
                 session.setAttribute("currentSessionUser",user); 
                 response.sendRedirect("userLogged.jsp"); 
                 //logged-in page 
               } 
               else
               { 
+            	System.out.println("LoginServlet: else");
                 response.sendRedirect("invalidSignup.jsp"); 
               }
               //error page 
@@ -96,8 +101,130 @@ public class LoginServlet extends HttpServlet {
         }//end case 1
         case 2:
         {
-        	System.out.println("Future Servlet");
-        	
+        	System.out.println("ProductOwner Servlet");
+        		
+            try 
+            { 
+              if (user.isValid()) 
+              { 
+            	  System.out.println("AM I VALID");
+                  /*user.setCatID(request.getParameter("catname")); 
+                  user.setProdName(request.getParameter("prodname")); 
+                  user.setProdSKU( request.getParameter("prodsku") );
+                  user.setProdPrice(request.getParameter("prodprice"));
+                  user.setProdDesc( request.getParameter("proddesc") );
+                  user = UserDAO.productOwner(user);*/
+            	  user = UserDAO.getAllCategories(user);
+                  session = request.getSession(true);  
+                  response.sendRedirect("productOwner.jsp"); 
+                   
+              } 
+              else
+              { 
+            	  //not loggedin, must not procede
+            	System.out.println("LoginServlet: else");
+                response.sendRedirect("invalidLogin.jsp"); 
+              }
+              //error page 
+            } 
+            catch (Throwable theException) 
+            { 
+              System.out.println(theException); 
+            }
+            break;
+        }
+        case 3:
+        {
+        	System.out.println("Add Product");
+        	try 
+            { 
+              if (user.isValid()) 
+              { 
+            	System.out.println("AM I VALID");
+            	user.setCatID(request.getParameter("catname")); 
+                user.setProdName(request.getParameter("prodname")); 
+                user.setProdSKU( request.getParameter("prodsku") );
+                user.setProdPrice(request.getParameter("prodprice"));
+                user.setProdDesc( request.getParameter("proddesc") );
+                user = UserDAO.productOwner(user); 
+                session = request.getSession(true);  
+                response.sendRedirect("userLogged.jsp"); 
+                //logged-in page 
+              } 
+              else
+              { 
+            	System.out.println("LoginServlet: else");
+                response.sendRedirect("invalidLogin.jsp"); 
+              }
+              //error page 
+            } 
+            catch (Throwable theException) 
+            { 
+              System.out.println(theException); 
+            }
+        	break;
+        }
+        case 4:
+        {
+        	System.out.println("CategoryOwner Servlet");
+    		
+            try 
+            { 
+              if (user.isValid()) 
+              { 
+            	  System.out.println("AM I VALID");
+                  /*user.setCatID(request.getParameter("catname")); 
+                  user.setProdName(request.getParameter("prodname")); 
+                  user.setProdSKU( request.getParameter("prodsku") );
+                  user.setProdPrice(request.getParameter("prodprice"));
+                  user.setProdDesc( request.getParameter("proddesc") );
+                  user = UserDAO.productOwner(user);*/
+             
+                  session = request.getSession(true);  
+                  response.sendRedirect("categoryOwner.jsp"); 
+                   
+              } 
+              else
+              { 
+            	  //not loggedin, must not procede
+            	System.out.println("LoginServlet: else");
+                response.sendRedirect("invalidLogin.jsp"); 
+              }
+              //error page 
+            } 
+            catch (Throwable theException) 
+            { 
+              System.out.println(theException); 
+            }
+            break;
+        }
+        case 5:
+        {
+        	System.out.println("Add Category");
+        	try 
+            { 
+              if (user.isValid()) 
+              { 
+            	System.out.println("AM I VALID");
+            	user.setCatName(request.getParameter("catname")); 
+                user.setCatDesc( request.getParameter("catdesc") );
+                //user = UserDAO.getAllCategories(user);
+                user = UserDAO.categoryOwner(user); 
+                session = request.getSession(true);  
+                response.sendRedirect("userLogged.jsp"); 
+                //logged-in page 
+              } 
+              else
+              { 
+            	System.out.println("LoginServlet: else");
+                response.sendRedirect("invalidLogin.jsp"); 
+              }
+              //error page 
+            } 
+            catch (Throwable theException) 
+            { 
+              System.out.println(theException); 
+            }
         	break;
         }
         default:

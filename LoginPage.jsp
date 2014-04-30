@@ -13,9 +13,6 @@
   Please enter your username: 
   <input type="text" name="un"/><br> 
   
-  Please enter your password 
-  <input type="text" name="pw"/> 
-  
   <input type="submit" value="submit">
   <input type="hidden" name="st" value="0" > 
 </form><br>

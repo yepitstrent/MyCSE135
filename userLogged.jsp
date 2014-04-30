@@ -9,9 +9,20 @@
 </head>
 
 <body>
-<center> 
+ 
   <% UserBean currentUser = (UserBean) (session.getAttribute("currentSessionUser"));%>
-  Welcome <%= currentUser.getFirstName() + " " + currentUser.getLastName() %> 
+  Welcome <%= currentUser.getUsername() %> 
+<center>  
+  <form action="LoginServlet">
+    Add a Category to the Page:
+    <input type="submit" value="Category"><br>
+    <input type="hidden" name="st" value="4" >
+  </form>
+  <form action="LoginServlet">
+    Add a Product to the Page:
+    <input type="submit" value="Product"><br>
+    <input type="hidden" name="st" value="2" >
+  </form>
 </center> 
 </body>
 
