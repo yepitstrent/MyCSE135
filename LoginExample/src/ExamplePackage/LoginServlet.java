@@ -288,6 +288,37 @@ public class LoginServlet extends HttpServlet {
             }
         	break;
         }
+        case 8:
+        {
+        	System.out.println("products browsing by Cat ID ");
+        	//get all products by partial string
+        	
+        	try 
+            { 
+              if (user.isValid()) 
+              { 
+            	System.out.println("AM I VALID");
+
+                user.setProdSearchCat(request.getParameter("catListForProd"));
+                System.out.println("IN CASE8 "+ request.getParameter("catListForProd"));
+                user = UserDAO.getProdFromCat(user); 
+                session = request.getSession(true);  
+                response.sendRedirect("productsDisplay.jsp"); 
+                //logged-in page 
+              } 
+              else
+              { 
+            	System.out.println("LoginServlet: 7");
+                response.sendRedirect("invalidLogin.jsp"); 
+              }
+              //error page 
+            } 
+            catch (Throwable theException) 
+            { 
+              System.out.println(theException); 
+            }
+        	break;
+        }
         default:
         {
         	System.out.println("DEFAULT");

@@ -36,7 +36,7 @@
     <%String[] strName = currentUser.getCatNameArrList().clone();  %>
     <%String[] strID = currentUser.getCatIDArrList().clone(); %> 
     Select a Category:
-    <Select name="catList" size="1" id="catogoryList">
+    <Select name="catListForProd" size="1" >
       <%
      int i=0;
      for(i=0;i<strName.length;i++)
@@ -67,7 +67,11 @@
       out.print("<p> id: " + prodID[i] + " name: " + prodName[i] + " description: " + prodDesc[i] + " </p>");
      }
     %>
-  
+    <!-- Clear the arrays in case next search doesn't execute a query -->
+    <%String[] emptyName = {" "}; String[] emptyDesc = {" "}; String[] emptyID = {" "}; %>
+  <%currentUser.setProdNameArr(emptyName); %>
+  <%currentUser.setProdDescArr(emptyDesc); %>
+  <%currentUser.setProdIDArr(emptyID); %>
 </center> 
 </body>
 

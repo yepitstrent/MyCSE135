@@ -36,7 +36,7 @@
     <%String[] strName = currentUser.getCatNameArrList().clone();  %>
     <%String[] strID = currentUser.getCatIDArrList().clone(); %> 
     Select a Category:
-    <Select name="catList" size="1" id="catogoryList">
+    <Select name="catListForProd" size="1" >
       <%
      int i=0;
      for(i=0;i<strName.length;i++)

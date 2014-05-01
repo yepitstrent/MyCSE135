@@ -30,8 +30,19 @@ public class UserBean
   private String[] prodDescArr;
   private String[] prodIDArr;
   
+  private String prodSearchCat;
+  
   public boolean valid;
 
+  public void setProdSearchCat(String parameter) 
+  {
+	  prodSearchCat = parameter;
+  }
+  
+  public String getProdSearchCat()
+  {
+	  return prodSearchCat;
+  }
   
   public void setProdIDArr(String[] arr) 
   {
@@ -186,7 +197,6 @@ return userID;
   {
 	  prodSearchStr = newProdSearchStr;
   }
-
 
   
 }

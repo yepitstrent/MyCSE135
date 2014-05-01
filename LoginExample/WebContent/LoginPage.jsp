@@ -28,7 +28,7 @@
   </select><br>
   Age:<input type="text" name="Age"><br>
   <p>Select State:</p>
-        <select name="state">
+        <select name="state" size="1">
 		<option value="AL">Alabama</option>
 		<option value="AK">Alaska</option>
 		<option value="AZ">Arizona</option>
