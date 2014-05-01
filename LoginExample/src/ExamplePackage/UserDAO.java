@@ -8,7 +8,8 @@ public class UserDAO
 {
   static Connection currentCon = null;
   static ResultSet rs = null;
-  
+  //DELETE FROM CATEGORIES WHERE CAT_ID NOT IN (SELECT PROD_CAT_ID FROM PRODUCTS) AND CAT_ID = 1;
+
   public static UserBean setIDSignup(UserBean bean)
   {     
 	    Statement stmt = null;

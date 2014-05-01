@@ -16,17 +16,25 @@
     <input type="submit" value="Logout"><br>
     <input type="hidden" name="st" value="default" >
   </form> 
+  
+  
 <center>  
+ 
   <form action="LoginServlet">
-    Add a Category to the Page:
-    <input type="submit" value="Category"><br>
+    <%String strCat = currentUser.getRole(); System.out.println(currentUser.getRole());
+      if(strCat.equals("owner")){%>Add/Delete a Category:<input type="submit" value="Category"><br>
+    <%}else{ %> <input type="hidden"><%} %>
     <input type="hidden" name="st" value="4" >
   </form>
   <form action="LoginServlet">
-    Add a Product to the Page:
-    <input type="submit" value="Product"><br>
+    <%String strProd = currentUser.getRole(); System.out.println(currentUser.getRole());
+      if(strProd.equals("owner")){%>Add/Delete a Product:<input type="submit" value="Product"><br>
+    <%}else{ %> <input type="hidden"><%} %>
     <input type="hidden" name="st" value="2" >
   </form>
+  
+  
+
 </center> 
 </body>
 
