@@ -9,6 +9,10 @@
 <body>
 <% UserBean currentUser = (UserBean) (session.getAttribute("currentSessionUser"));%>
   Welcome <%= currentUser.getUsername() %>
+  <form action=LoginServlet>
+    <input type="submit" value="Logout"><br>
+    <input type="hidden" name="st" value="default" >
+  </form> 
   
   <h1>Add a new category to the page</h1>
   
@@ -17,8 +21,12 @@
     <input type="text" name="catname"/><br>  
     Description:
     <input type="text" name="catdesc"/><br>  
-  <input type="submit" value="submit">
+  <input type="submit" value="Submit">
   <input type="hidden" name="st" value="5" >
+  </form>
+  
+  <form action=userLogged.jsp>
+    <input type="submit" value="Cancel">
   </form>
 
 </body>

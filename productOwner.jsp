@@ -2,7 +2,7 @@
 <%@ page import="java.util.*" %>  
 <jsp:useBean id="myBean" scope="session" class="ExamplePackage.UserBean"/> 
 
-<%@taglib prefix="c" uri="http://java.sun.com/jstl/core_rt"%>
+
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -13,13 +13,17 @@
 <body>
   <% UserBean currentUser = (UserBean) (session.getAttribute("currentSessionUser"));%>
   Welcome <%= currentUser.getUsername() %>
+  <form action=LoginServlet>
+    <input type="submit" value="Logout"><br>
+    <input type="hidden" name="st" value="default" >
+  </form>
   
   <h1>Add a product to the page</h1>
   
   <form action=LoginServlet>
     <%String[] strName = currentUser.getCatNameArrList().clone(); %>
     <%String[] strID = currentUser.getCatIDArrList().clone(); %> 
-    
+    Select a Category:
     <Select name="catList" size="1" id="catogoryList">
       <%
      int i=0;
@@ -28,9 +32,7 @@
       out.print("<option value=\"" + strID[i] + "\">"+ strName[i] +"</option>");
      }
     %>
-    </Select><br>
-    Select a Category:
-    <input type="text" name="catname"/><br> 
+    </Select><br> 
     Enter your Product Name: 
     <input type="text" name="prodname"/><br> 
     Enter SKU:
@@ -39,8 +41,11 @@
     <input type="text" name="prodprice"/><br>
     Description:
     <input type="text" name="proddesc"/><br>  
-  <input type="submit" value="submit">
+  <input type="submit" value="Submit">
   <input type="hidden" name="st" value="3" >
+  </form>
+  <form action=userLogged.jsp>
+    <input type="submit" value="Cancel">
   </form>
 </body>
 </html>

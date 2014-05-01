@@ -9,8 +9,86 @@ public class UserDAO
   static Connection currentCon = null;
   static ResultSet rs = null;
   
+  public static UserBean setIDSignup(UserBean bean)
+  {     
+	    Statement stmt = null;
+	    String currUserID;
+	    //INSERT INTO THE_USER
+	    String searchQuery = "SELECT * from THE_USER WHERE USER_NAME = " + bean.getUsername(); 
+	    System.out.println("Query: "+searchQuery); 
+	    
+	    try 
+	    { //connect to DB 
+	      currentCon = ConnectionManager.getConnection(); 
+	      stmt=currentCon.createStatement(); 
+	      rs = stmt.executeQuery(searchQuery);
+	      //boolean more; // = rs.next(); // if user does not exist set the isValid variable to false 
+	    
+	      boolean more = rs.next();
+	      {
+	        if (!more) 
+	        { 
+	          System.out.println("IN HERER Sorry, you are not a registered user! Please sign up first"); 
+	          bean.setValid(false); 
+	        } //if user exists set the isValid variable to true 
+	        else if (more) 
+	        {
+	        	currUserID = rs.getString("USER_ID");
+	        	bean.setUserID(Integer.parseInt(currUserID));
+	          //flag = true;
+	        	//System.out.println(rs.getString( "CAT_NAME" ));
+	    	  //catNameArrList.add(rs.getString( "CAT_NAME" ) );
+	    	  //catDescArrList.add(rs.getString( "CAT_DESCR" ) );
+	    	  //catIDArrList.add(rs.getString("CAT_ID"));
+	   
+	          bean.setValid(true); 
+	        }
+	      }
+	      
+	    }
+	    catch (Exception ex) 
+	    { 
+	      System.out.println("Log In failed: An Exception has occurred! " + ex);
+	    } //some exception handling 
+	    finally 
+	    {
+	      if (rs != null)
+	      {
+	        try
+	        {
+	          rs.close(); 
+	        }
+	        catch (Exception e) 
+	        {}
+	        rs = null; 
+	      }
+	      if (stmt != null) 
+	      {
+	        try
+	        { 
+	          stmt.close();
+	        }
+	        catch (Exception e) 
+	        {}
+	        stmt = null; 
+	      }
+	      if (currentCon != null)
+	      {
+	        try
+	        { 
+	          currentCon.close();
+	        }
+	        catch (Exception e) 
+	        {}
+	        currentCon = null; 
+	      }
+	    }
+	    return bean;
+  }
+  
   public static UserBean signup(UserBean bean)
   {
+	    
 	//preparing some objects for connection 
 	    Statement stmt = null; 
 	    
@@ -58,6 +136,8 @@ public class UserDAO
 	      stmt=currentCon.createStatement(); 
 	      stmt.executeUpdate(searchQuery);
 	      bean.setValid(true);
+	      
+	      
 	      //boolean more = rs.next(); // if user does not exist set the isValid variable to false 
 	      //System.out.println(rs);
 	      /*if (!more) 

@@ -33,9 +33,15 @@ public class LoginServlet extends HttpServlet {
 	 */
     public void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, java.io.IOException 
     { 
-      
-    	
-      int test = Integer.parseInt( request.getParameter("st") );
+      int test;        
+      if(request.getParameter("st").equals("default") )
+      {
+    	  test = -1;
+      }
+      else
+      {
+        test = Integer.parseInt( request.getParameter("st") );
+      }
       switch( test )
       {
         case 0://Log in servlet
@@ -51,8 +57,9 @@ public class LoginServlet extends HttpServlet {
             { 
               session = request.getSession(true); 
               session.setAttribute("currentSessionUser",user);
-              
-              response.sendRedirect("userLogged.jsp"); 
+             
+              response.sendRedirect("userLogged.jsp");
+             
               //logged-in page 
             } 
             else
@@ -88,7 +95,7 @@ public class LoginServlet extends HttpServlet {
               } 
               else
               { 
-            	System.out.println("LoginServlet: else");
+            	System.out.println("LoginServlet: 1");
                 response.sendRedirect("invalidSignup.jsp"); 
               }
               //error page 
@@ -107,6 +114,7 @@ public class LoginServlet extends HttpServlet {
             { 
               if (user.isValid()) 
               { 
+            	  user = UserDAO.setIDSignup(user);
             	  System.out.println("AM I VALID");
                   /*user.setCatID(request.getParameter("catname")); 
                   user.setProdName(request.getParameter("prodname")); 
@@ -122,7 +130,7 @@ public class LoginServlet extends HttpServlet {
               else
               { 
             	  //not loggedin, must not procede
-            	System.out.println("LoginServlet: else");
+            	System.out.println("LoginServlet: 2");
                 response.sendRedirect("invalidLogin.jsp"); 
               }
               //error page 
@@ -141,7 +149,7 @@ public class LoginServlet extends HttpServlet {
               if (user.isValid()) 
               { 
             	System.out.println("AM I VALID");
-            	user.setCatID(request.getParameter("catname")); 
+            	user.setCatID(request.getParameter("catList")); 
                 user.setProdName(request.getParameter("prodname")); 
                 user.setProdSKU( request.getParameter("prodsku") );
                 user.setProdPrice(request.getParameter("prodprice"));
@@ -153,13 +161,14 @@ public class LoginServlet extends HttpServlet {
               } 
               else
               { 
-            	System.out.println("LoginServlet: else");
+            	System.out.println("LoginServlet: 3");
                 response.sendRedirect("invalidLogin.jsp"); 
               }
               //error page 
             } 
             catch (Throwable theException) 
             { 
+            	
               System.out.println(theException); 
             }
         	break;
@@ -187,7 +196,7 @@ public class LoginServlet extends HttpServlet {
               else
               { 
             	  //not loggedin, must not procede
-            	System.out.println("LoginServlet: else");
+            	System.out.println("LoginServlet: 4");
                 response.sendRedirect("invalidLogin.jsp"); 
               }
               //error page 
@@ -216,7 +225,7 @@ public class LoginServlet extends HttpServlet {
               } 
               else
               { 
-            	System.out.println("LoginServlet: else");
+            	System.out.println("LoginServlet: 5");
                 response.sendRedirect("invalidLogin.jsp"); 
               }
               //error page 
@@ -230,6 +239,8 @@ public class LoginServlet extends HttpServlet {
         default:
         {
         	System.out.println("DEFAULT");
+        	user.setValid(false);
+        	response.sendRedirect("LoginPage.jsp");
         }//end default
       }//end switch 
     } 
