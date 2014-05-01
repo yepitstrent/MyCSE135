@@ -8,8 +8,13 @@ public class UserDAO
 {
   static Connection currentCon = null;
   static ResultSet rs = null;
-  //DELETE FROM CATEGORIES WHERE CAT_ID NOT IN (SELECT PROD_CAT_ID FROM PRODUCTS) AND CAT_ID = 1;
-
+  
+  public static UserBean getProdFromString(UserBean bean)
+  {
+	  bean.getProdSearchStr();
+	  return bean;
+  }
+  
   public static UserBean setIDSignup(UserBean bean)
   {     
 	    Statement stmt = null;
@@ -89,6 +94,7 @@ public class UserDAO
   
   public static UserBean signup(UserBean bean)
   {
+	    bean = getAllCategories(bean);
 	    
 	//preparing some objects for connection 
 	    Statement stmt = null; 
@@ -233,6 +239,7 @@ public class UserDAO
 	    	  System.out.println("Setting cat arr list to bean");
 	          bean.setCatNameArrList(catNameArrList);
 	          bean.setCatIDArrList(catIDArrList);
+	          bean.setCatDescArray(catDescArrList);
 	      }
 	      else
 	      {
@@ -298,6 +305,72 @@ public class UserDAO
 	  
 	  //String searchQuery2 = "SELECT * FROM CATEGORIES";
 	  // "System.out.println" prints in the console; Normally used to trace the process  
+	  System.out.println("Query: "+searchQuery); 
+	    
+	  try 
+	  { //connect to DB 
+	    currentCon = ConnectionManager.getConnection(); 
+	    stmt=currentCon.createStatement(); 
+	    stmt.executeUpdate(searchQuery);
+	    //boolean more = rs.next(); // if user does not exist set the isValid variable to false 
+	    
+        bean.setValid(true); 
+
+	  }
+	  catch (Exception ex) 
+	  { 
+	    System.out.println("Log In failed: An Exception has occurred! " + ex);
+	  } //some exception handling 
+	  finally 
+	  {
+	    if (rs != null)
+	    {
+	      try
+	      {
+	        rs.close(); 
+	      }
+	      catch (Exception e) 
+	      {}
+	      rs = null; 
+	    }
+	    if (stmt != null) 
+	    {
+	      try
+	      { 
+	        stmt.close();
+	      }
+	      catch (Exception e) 
+	      {}
+	      stmt = null; 
+	    }
+	    if (currentCon != null)
+	    {
+	      try
+	      { 
+	        currentCon.close();
+	      }
+	      catch (Exception e) 
+	      {}
+	      currentCon = null; 
+	    }
+	  }
+	  return bean;
+  }
+
+
+  public static UserBean catRemove(UserBean bean)
+  {
+      System.out.println("In DAO catRemove");
+	  
+	  Statement stmt = null; 
+	  String cat = bean.getCatName();  
+	  String desc = bean.getCatDesc();
+
+	  String searchQuery = "INSERT INTO CATEGORIES ( CAT_NAME, CAT_DESCR )"
+			               + " SELECT * FROM (SELECT  '" + cat + "', '" + desc + "' ) AS tmp "
+			               + " WHERE NOT EXISTS ( "
+			               + " SELECT CAT_NAME FROM CATEGORIES WHERE CAT_NAME = '" + cat + "' ) LIMIT 1";
+	    
 	  System.out.println("Query: "+searchQuery); 
 	    
 	  try 
@@ -443,6 +516,7 @@ public class UserDAO
     System.out.println("Your user name is JAVA " + username); 
     //System.out.println("Your password is JAVA " + password); 
     System.out.println("Query: "+searchQuery); 
+    bean = getAllCategories(bean);
     
     try 
     { //connect to DB 
@@ -461,7 +535,7 @@ public class UserDAO
         String userName = rs.getString("USER_NAME"); 
         String role = rs.getString("USER_ROLE"); 
         String userID = rs.getString("USER_ID");
-        System.out.println("Welcome " + userName); 
+        System.out.println("Welcome " + userName + " " + rs.getString("USER_ROLE") + " " + rs.getString("USER_ID")); 
         bean.setUserName(username); 
         bean.setUserID(Integer.parseInt(userID));
         bean.setRole(role);

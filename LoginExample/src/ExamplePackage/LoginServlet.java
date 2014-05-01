@@ -49,7 +49,7 @@ public class LoginServlet extends HttpServlet {
           System.out.println("Login Servlet");
           try 
           { 
-            
+            System.out.println("get un: " + request.getParameter("un") + " B4 dao.login");
             user.setUserName(request.getParameter("un")); 
             user = UserDAO.login(user); 
         
@@ -57,9 +57,8 @@ public class LoginServlet extends HttpServlet {
             { 
               session = request.getSession(true); 
               session.setAttribute("currentSessionUser",user);
-             
-              response.sendRedirect("userLogged.jsp");
-             
+              System.out.println("B4 userlogged.jsp");
+              response.sendRedirect("userLogged.jsp"); 
               //logged-in page 
             } 
             else
@@ -182,16 +181,10 @@ public class LoginServlet extends HttpServlet {
               if (user.isValid()) 
               { 
             	  System.out.println("AM I VALID");
-                  /*user.setCatID(request.getParameter("catname")); 
-                  user.setProdName(request.getParameter("prodname")); 
-                  user.setProdSKU( request.getParameter("prodsku") );
-                  user.setProdPrice(request.getParameter("prodprice"));
-                  user.setProdDesc( request.getParameter("proddesc") );
-                  user = UserDAO.productOwner(user);*/
-             
-                  session = request.getSession(true);  
-                  response.sendRedirect("categoryOwner.jsp"); 
-                   
+            	  user = UserDAO.getAllCategories(user);
+                session = request.getSession(true);  
+                response.sendRedirect("categoryOwner.jsp"); 
+                 
               } 
               else
               { 
@@ -219,6 +212,65 @@ public class LoginServlet extends HttpServlet {
                 user.setCatDesc( request.getParameter("catdesc") );
                 //user = UserDAO.getAllCategories(user);
                 user = UserDAO.categoryOwner(user); 
+                session = request.getSession(true);  
+                response.sendRedirect("userLogged.jsp"); 
+                //logged-in page 
+              } 
+              else
+              { 
+            	System.out.println("LoginServlet: 5");
+                response.sendRedirect("invalidLogin.jsp"); 
+              }
+              //error page 
+            } 
+            catch (Throwable theException) 
+            { 
+              System.out.println(theException); 
+            }
+        	break;
+        }
+
+        case 6:
+        {
+          System.out.println("Delete Category");
+          try 
+            { 
+              if (user.isValid()) 
+              { 
+              System.out.println("AM I VALID");
+              user.setCatName(request.getParameter("catList")); 
+                user = UserDAO.categoryOwner(user); 
+                session = request.getSession(true);  
+                response.sendRedirect("userLogged.jsp"); 
+                //logged-in page 
+              } 
+              else
+              { 
+              System.out.println("LoginServlet: 5");
+                response.sendRedirect("invalidLogin.jsp"); 
+              }
+              //error page 
+            } 
+            catch (Throwable theException) 
+            { 
+              System.out.println(theException); 
+            }
+          break;
+        }
+        case 7:
+        {
+        	System.out.println("products browsing by partial string ");
+        	//get all products by partial string
+        	
+        	try 
+            { 
+              if (user.isValid()) 
+              { 
+            	System.out.println("AM I VALID");
+
+                user.setProdSearchStr(request.getParameter("prodname"));
+                //user = UserDAO.getAllCategories(user);
+                user = UserDAO.getProdFromString(user); 
                 session = request.getSession(true);  
                 response.sendRedirect("userLogged.jsp"); 
                 //logged-in page 

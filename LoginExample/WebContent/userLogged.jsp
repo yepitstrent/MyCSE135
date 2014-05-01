@@ -16,11 +16,8 @@
     <input type="submit" value="Logout"><br>
     <input type="hidden" name="st" value="default" >
   </form> 
-  
-  
 <center>  
- 
-  <form action="LoginServlet">
+<form action="LoginServlet">
     <%String strCat = currentUser.getRole(); System.out.println(currentUser.getRole());
       if(strCat.equals("owner")){%>Add/Delete a Category:<input type="submit" value="Category"><br>
     <%}else{ %> <input type="hidden"><%} %>
@@ -33,8 +30,32 @@
     <input type="hidden" name="st" value="2" >
   </form>
   
+  <h1>Products Browsing Page</h1>
   
-
+  <form action=LoginServlet>
+    <%String[] strName = currentUser.getCatNameArrList().clone();  %>
+    <%String[] strID = currentUser.getCatIDArrList().clone(); %> 
+    Select a Category:
+    <Select name="catList" size="1" id="catogoryList">
+      <%
+     int i=0;
+     for(i=0;i<strName.length;i++)
+     {
+      out.print("<option value=\"" + strID[i] + "\">"+ strName[i] +"</option>");
+     }
+    %>
+    </Select>
+  <input type="submit" value="Submit">
+  <input type="hidden" name="st" value="8" >
+  </form>
+  
+  <form action=LoginServlet>
+    Search By Product Name: 
+    <input type="text" name="prodname"/>
+  <input type="submit" value="Submit">
+  <input type="hidden" name="st" value="7" >
+  </form>
+  
 </center> 
 </body>
 
