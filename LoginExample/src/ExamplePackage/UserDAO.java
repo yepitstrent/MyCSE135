@@ -11,8 +11,110 @@ public class UserDAO
   
   public static UserBean getProdFromString(UserBean bean)
   {
-	  bean.getProdSearchStr();
-	  return bean;
+	  System.out.println("IN DAO GET PROD FM STRING");
+	  //get string from bean
+	  String str = bean.getProdSearchStr();
+	  ArrayList<String> prodIDArrList = new ArrayList<String>();
+	  ArrayList<String> prodDescArrList = new ArrayList<String>();
+	  ArrayList<String> prodNameArrList = new ArrayList<String>();
+	  
+	  //do sql
+	  Statement stmt = null;
+	  String searchQuery = "SELECT * from PRODUCTS WHERE PROD_NAME LIKE '%" 
+	                        + str + "%' OR PROD_DESCR LIKE '%" 
+			                + str + "%'"; 
+	  System.out.println("Query: "+searchQuery); 
+	  
+	  try 
+	    { //connect to DB 
+	      currentCon = ConnectionManager.getConnection(); 
+	      stmt=currentCon.createStatement(); 
+	      rs = stmt.executeQuery(searchQuery);
+	      boolean more; // = rs.next(); // if user does not exist set the isValid variable to false 
+	      boolean flag = false;
+	      
+	      while( more = rs.next() )
+	      {
+	        if (!more) 
+	        { 
+	          System.out.println("IN HERER Sorry, you are not a registered user! Please sign up first"); 
+	          bean.setValid(false); 
+	        } //if user exists set the isValid variable to true 
+	        else if (more) 
+	        {
+	          flag = true;
+	        	
+			  System.out.println("parse prod arr");
+	    	  prodNameArrList.add(rs.getString( "PROD_NAME" ) );
+	    	  
+			  prodDescArrList.add(rs.getString( "PROD_DESCR" ) );
+	    	  
+			  prodIDArrList.add(rs.getString("PROD_ID"));
+	   
+	          bean.setValid(true); 
+	        }
+	      }
+	      if(flag)
+	      {
+	    	  System.out.println("Setting prod arr list to bean");
+	          bean.setProdNameArr(prodNameArrList.toArray(new String[prodNameArrList.size()]));
+	          bean.setProdIDArr(prodIDArrList.toArray(new String[prodIDArrList.size()]));
+	          bean.setProdDescArr(prodDescArrList.toArray(new String[prodDescArrList.size()]));
+	      }
+	      else
+	      {
+	    	  System.out.println("Name is null");
+	    	  prodNameArrList.add("No Results Found In This Search");
+	    	  prodNameArrList.add("No Results Found In This Search");
+	    	  prodNameArrList.add("No Results Found In This Search");
+	    	  bean.setProdNameArr(prodNameArrList.toArray(new String[prodNameArrList.size()]));
+	          bean.setProdIDArr(prodIDArrList.toArray(new String[prodIDArrList.size()]));
+	          bean.setProdDescArr(prodDescArrList.toArray(new String[prodDescArrList.size()]));
+	    	  
+	      }
+	    }
+	    catch (Exception ex) 
+	    { 
+	    	System.out.println("Prod Search BY SRT");
+	      System.out.println("Log In failed: An Exception has occurred! " + ex);
+	    } //some exception handling 
+	    finally 
+	    {
+	      if (rs != null)
+	      {
+	        try
+	        {
+	          rs.close(); 
+	        }
+	        catch (Exception e) 
+	        {}
+	        rs = null; 
+	      }
+	      if (stmt != null) 
+	      {
+	        try
+	        { 
+	          stmt.close();
+	        }
+	        catch (Exception e) 
+	        {}
+	        stmt = null; 
+	      }
+	      if (currentCon != null)
+	      {
+	        try
+	        { 
+	          currentCon.close();
+	        }
+	        catch (Exception e) 
+	        {}
+	        currentCon = null; 
+	      }
+	    }
+	    return bean;
+	  //set variables to arr
+	  //set arr to bean
+	  //return bean;
   }
   
   public static UserBean setIDSignup(UserBean bean)

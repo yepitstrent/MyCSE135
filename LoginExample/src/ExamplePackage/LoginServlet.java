@@ -269,15 +269,15 @@ public class LoginServlet extends HttpServlet {
             	System.out.println("AM I VALID");
 
                 user.setProdSearchStr(request.getParameter("prodname"));
-                //user = UserDAO.getAllCategories(user);
+                System.out.println("IN CASE7 "+ request.getParameter("prodname"));
                 user = UserDAO.getProdFromString(user); 
                 session = request.getSession(true);  
-                response.sendRedirect("userLogged.jsp"); 
+                response.sendRedirect("productsDisplay.jsp"); 
                 //logged-in page 
               } 
               else
               { 
-            	System.out.println("LoginServlet: 5");
+            	System.out.println("LoginServlet: 7");
                 response.sendRedirect("invalidLogin.jsp"); 
               }
               //error page 

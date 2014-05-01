@@ -26,9 +26,42 @@ public class UserBean
   private String[] catDescList;
   private String[] catIDList;
   
-  public boolean valid;
+  private String[] prodNameArr;
+  private String[] prodDescArr;
+  private String[] prodIDArr;
   
- 
+  public boolean valid;
+
+  
+  public void setProdIDArr(String[] arr) 
+  {
+      prodIDArr = arr.clone();	
+  }
+  
+  public String[] getProdIDArr()
+  {
+	  return prodIDArr;
+  }
+  
+  public void setProdDescArr(String[] arr)
+  {
+	  prodDescArr = arr.clone();
+  }
+  
+  public String[] getProdDescArr()
+  {
+	  return prodDescArr;
+  }
+  
+  public void setProdNameArr(String[] arr)
+  {
+	  prodNameArr = arr.clone();
+  }
+  
+  public String[] getProdNameArr()
+  {
+	return prodNameArr;  
+  }
   
   public String getCatNameByIndex(int i){return catNameList[i];}
   public String getCatIDByIndex(int i){return catIDList[i];}
@@ -153,5 +186,7 @@ return userID;
   {
 	  prodSearchStr = newProdSearchStr;
   }
+
+
   
 }
