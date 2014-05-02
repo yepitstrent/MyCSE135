@@ -11,9 +11,15 @@
 <title>Add Product Page</title>
 </head>
 <body>
-	<% UserBean currentUser = (UserBean) (session.getAttribute("currentSessionUser"));%>
+	<%
+		System.out.println("TOP OF PROD OWNER");
+	%>
+	<%
+		UserBean currentUser = (UserBean) (session
+				.getAttribute("currentSessionUser"));
+	%>
 	Welcome
-	<%= currentUser.getUsername() %>
+	<%=currentUser.getUsername()%>
 	<form action=LoginServlet>
 		<input type="submit" value="Logout"><br> <input
 			type="hidden" name="st" value="default">
@@ -25,21 +31,71 @@
 	<h1>Add a product to the page</h1>
 
 	<form action=LoginServlet>
-		<%String[] strName = currentUser.getCatNameArrList().clone(); %>
-		<%String[] strID = currentUser.getCatIDArrList().clone(); %>
+		<%
+			String[] strName = currentUser.getCatNameArrList().clone();
+		%>
+		<%
+			String[] strID = currentUser.getCatIDArrList().clone();
+		%>
 		Select a Category: <Select name="catList" size="1" id="catogoryList">
 			<%
-     int i=0;
-     for(i=0;i<strName.length;i++)
-     {
-      out.print("<option value=\"" + strID[i] + "\">"+ strName[i] +"</option>");
-     }
-    %>
+				int i = 0;
+				for (i = 0; i < strName.length; i++) {
+					out.print("<option value=\"" + strID[i] + "\">" + strName[i]
+							+ "</option>");
+				}
+			%>
 		</Select><br> Enter your Product Name: <input type="text" name="prodname" /><br>
 		Enter SKU: <input type="text" name="prodsku" /><br> Enter Price:
 		$ <input type="text" name="prodprice" /><br> Description: <input
 			type="text" name="proddesc" /><br> <input type="submit"
 			value="Submit"> <input type="hidden" name="st" value="3">
+	</form>
+
+	<form action=LoginServlet>
+		<%
+			String[] prodName = currentUser.getProdNameArrList().clone();
+			String[] prodSKU = currentUser.getProdSKUArrList().clone();
+			String[] prodPrice = currentUser.getProdPriceArrList().clone();
+		%>
+		<%
+			String[] strDesc = currentUser.getCatDescArray().clone();
+		%>
+
+
+		<%
+			;
+			for (i = 0; i < prodName.length; i++) {
+				out.print(" <tr><form><th><input value=\" "
+						+ prodName[i]
+						+ " \" name=\"newProdname"
+						+ i
+						+ "\" size=\"20\"/></th><th><input value=\""
+						+ prodSKU[i]
+						+ "\" name=\"newProdSKU"
+						+ i
+						+ "\" size=\"10\"/></th><th><input value=\""
+								+ prodPrice[i]
+										+ "\" name=\"newProdPrice"
+										+ i
+										+ "\" size=\"10\"/></th><th>"
+						+ "<form action=LoginServlet><input type=\"submit\" name=\"updateProd"
+						+ i
+						+ "\" value=\"Update\" />"
+						+ "<input type=\"hidden\" name=\"prodIndex\" value=\""
+						+ i
+						+ "\" >"
+						+ "<input type=\"hidden\" name=\"st\" value=\"13\" ></form>"
+						+ "<form action=LoginServlet><input type=\"submit\" name=\"removeProd"
+						+ i
+						+ "\" value=\"Remove\" />"
+						+ "<input type=\"hidden\" name=\"ProdIndex\" value=\""
+						+ i
+						+ "\" >"
+						+ "<input type=\"hidden\" name=\"st\" value=\"14\" ></form>"
+						+ "</th>" + "</form></tr>");
+			}
+		%>
 	</form>
 
 </body>

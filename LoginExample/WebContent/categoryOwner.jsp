@@ -49,11 +49,11 @@
 			for (i = 0; i < strName.length; i++) {
 				out.print(" <tr><form><th><input value=\" "
 						+ strName[i]
-						+ " \" name=\"name"
+						+ " \" name=\"newname"
 						+ i
 						+ "\" size=\"10\"/></th><th><input value=\""
 						+ strDesc[i]
-						+ "\" name=\"desc"
+						+ "\" name=\"newdesc"
 						+ i
 						+ "\" size=\"40\"/></th><th>"
 						+ "<form action=LoginServlet><input type=\"submit\" name=\"updatecat"

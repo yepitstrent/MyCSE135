@@ -544,12 +544,13 @@ public class UserDAO {
 		Statement stmt = null;
 		ArrayList<String> prodNameArrList = new ArrayList<String>();
 		ArrayList<String> prodPriceArrList = new ArrayList<String>();// need
-																		// setters
-																		// and
-																		// getters
+		ArrayList<String> prodSKUArrList = new ArrayList<String>();
+		// setters
+		// and
+		// getters
 		ArrayList<String> prodIDArrList = new ArrayList<String>();
 
-		String searchQuery = "SELECT * from PRODUCTS";
+		String searchQuery = "SELECT * from PRODUCTS ORDER BY PROD_ID ASC";
 		System.out.println("Query: " + searchQuery);
 
 		try { // connect to DB
@@ -568,6 +569,7 @@ public class UserDAO {
 				else if (more) {
 					flag = true;
 					// System.out.println(rs.getString("PROD_ID"));
+					prodSKUArrList.add(rs.getString("PROD_SKU"));
 					prodNameArrList.add(rs.getString("PROD_NAME"));
 					prodPriceArrList.add(rs.getString("PROD_PRICE"));
 					prodIDArrList.add(rs.getString("PROD_ID"));
@@ -577,6 +579,8 @@ public class UserDAO {
 			}
 			if (flag) {
 				System.out.println("Setting cat arr list to bean");
+				bean.setProdSKUArrList(prodSKUArrList
+						.toArray(new String[prodSKUArrList.size()]));
 				bean.setProdNameArrList(prodNameArrList
 						.toArray(new String[prodNameArrList.size()]));
 				bean.setProdIDArrList(prodIDArrList
@@ -587,12 +591,15 @@ public class UserDAO {
 				prodNameArrList.add(" ");
 				prodPriceArrList.add(" ");
 				prodIDArrList.add(" ");
+				prodSKUArrList.add(" ");
 				bean.setProdNameArrList(prodNameArrList
 						.toArray(new String[prodNameArrList.size()]));
 				bean.setProdIDArrList(prodIDArrList
 						.toArray(new String[prodIDArrList.size()]));
 				bean.setProdDescArray(prodPriceArrList
 						.toArray(new String[prodPriceArrList.size()]));
+				bean.setProdSKUArrList(prodSKUArrList
+						.toArray(new String[prodSKUArrList.size()]));
 
 			}
 		} catch (Exception ex) {
@@ -635,7 +642,7 @@ public class UserDAO {
 																	// getters
 		ArrayList<String> catIDArrList = new ArrayList<String>();
 
-		String searchQuery = "SELECT * from CATEGORIES";
+		String searchQuery = "SELECT * from CATEGORIES ORDER BY CAT_ID ASC";
 		System.out.println("Query: " + searchQuery);
 
 		try { // connect to DB
@@ -1073,10 +1080,12 @@ public class UserDAO {
 		System.out.println("Did I make it this far?" + index);
 		String prodId = idArr[Integer.parseInt(index)];
 
-		/*String searchQuery = "INSERT INTO CART "
-				+ "( CART_ID, CART_PROD_ID, CART_PROD_PRICE ) " + "VALUES("
-				+ bean.getUserID() + ", " + prodId + ", "
-				+ priceArr[Integer.parseInt(index)] + " )";*/
+		/*
+		 * String searchQuery = "INSERT INTO CART " +
+		 * "( CART_ID, CART_PROD_ID, CART_PROD_PRICE ) " + "VALUES(" +
+		 * bean.getUserID() + ", " + prodId + ", " +
+		 * priceArr[Integer.parseInt(index)] + " )";
+		 */
 
 		String searchQuery = "INSERT INTO CART "
 				+ "( CART_ID, CART_PROD_ID, CART_PROD_PRICE ) "
@@ -1132,65 +1141,222 @@ public class UserDAO {
 	}
 
 	public static UserBean checkOut(UserBean bean) {
-	
+
 		// preparing some objects for connection
-				Statement stmt = null;
-				String searchQuery = "DELETE from CART where CART_ID="
-						+ bean.getUserID();
-				
-/* DELETE FROM PRODUCTS WHERE PROD_ID IN (SELECT CART_PROD_ID FROM CART WHERE CART_ID = 3);*/
-				String otherQuery = "DELETE FROM PRODUCTS WHERE PROD_ID IN "
-                     +"(SELECT CART_PROD_ID FROM CART WHERE CART_ID = "
-						+ bean.getUserID() + ")";
+		Statement stmt = null;
+		String searchQuery = "DELETE from CART where CART_ID="
+				+ bean.getUserID();
 
-				try { // connect to DB
-					currentCon = ConnectionManager.getConnection();
-					stmt = currentCon.createStatement();
-					System.out.println("1 $$$$$$$$$$$$$$$$$$$$$");
-					int i = stmt.executeUpdate(otherQuery);
-					System.out.println("2 $$$$$$$$$$$$$$$$$$$$$");
-					int j = stmt.executeUpdate(searchQuery);
-					System.out.println("3 $$$$$$$$$$$$$$$$$$$$$");
-//					boolean more = rs.next(); // if user does not exist set the isValid
-												// variable to false
+		/*
+		 * DELETE FROM PRODUCTS WHERE PROD_ID IN (SELECT CART_PROD_ID FROM CART
+		 * WHERE CART_ID = 3);
+		 */
+		String otherQuery = "DELETE FROM PRODUCTS WHERE PROD_ID IN "
+				+ "(SELECT CART_PROD_ID FROM CART WHERE CART_ID = "
+				+ bean.getUserID() + ")";
 
-					if (false) {
-						System.out
-								.println("Sorry, you are not a registered user! Please sign up first");
-						bean.setValid(false);
-					} // if user exists set the isValid variable to true
-					else if (true) {
+		try { // connect to DB
+			currentCon = ConnectionManager.getConnection();
+			stmt = currentCon.createStatement();
+			System.out.println("1 $$$$$$$$$$$$$$$$$$$$$");
+			int i = stmt.executeUpdate(otherQuery);
+			System.out.println("2 $$$$$$$$$$$$$$$$$$$$$");
+			int j = stmt.executeUpdate(searchQuery);
+			System.out.println("3 $$$$$$$$$$$$$$$$$$$$$");
+			// boolean more = rs.next(); // if user does not exist set the
+			// isValid
+			// variable to false
 
-						bean.setValid(true);
-					}
-				} catch (Exception ex) {
-					System.out.println("Log In failed: An Exception has occurred! "
-							+ ex);
-				} // some exception handling
-				finally {
-					if (rs != null) {
-						try {
-							rs.close();
-						} catch (Exception e) {
-						}
-						rs = null;
-					}
-					if (stmt != null) {
-						try {
-							stmt.close();
-						} catch (Exception e) {
-						}
-						stmt = null;
-					}
-					if (currentCon != null) {
-						try {
-							currentCon.close();
-						} catch (Exception e) {
-						}
-						currentCon = null;
-					}
+			if (false) {
+				System.out
+						.println("Sorry, you are not a registered user! Please sign up first");
+				bean.setValid(false);
+			} // if user exists set the isValid variable to true
+			else if (true) {
+
+				bean.setValid(true);
+			}
+		} catch (Exception ex) {
+			System.out.println("Log In failed: An Exception has occurred! "
+					+ ex);
+		} // some exception handling
+		finally {
+			if (rs != null) {
+				try {
+					rs.close();
+				} catch (Exception e) {
 				}
-				return bean;
+				rs = null;
+			}
+			if (stmt != null) {
+				try {
+					stmt.close();
+				} catch (Exception e) {
+				}
+				stmt = null;
+			}
+			if (currentCon != null) {
+				try {
+					currentCon.close();
+				} catch (Exception e) {
+				}
+				currentCon = null;
+			}
+		}
+		return bean;
+	}
+
+	public static UserBean updateProdByID(UserBean bean) {
+		Statement stmt = null;
+
+		int index = Integer.parseInt(bean.getProdIndex());
+		System.out.println("^%%%%$%$%$ IN Here userDAO update");
+		String[] arr = bean.getProdIDArrList();
+		String id = arr[index];
+
+		String strVar1 = bean.getUpdateProdName();
+		String strVar2 = bean.getUpdateProdSKU();
+		String strVar3 = bean.getUpdateProdPrice();
+
+		String searchQuery = "UPDATE PRODUCTS SET PROD_NAME = '" + strVar1
+				+ "', PROD_SKU = '" + strVar2 + "', PROD_PRICE = '" + strVar3
+				+ "' WHERE PROD_ID = " + id;
+
+		System.out.println("Query: " + searchQuery);
+
+		try { // connect to DB
+			currentCon = ConnectionManager.getConnection();
+			stmt = currentCon.createStatement();
+			int i = stmt.executeUpdate(searchQuery);
+			bean.setValid(true);
+
+		} catch (Exception ex) {
+			System.out.println("Signup failed: An Exception has occurred! "
+					+ ex);
+		} // some exception handling
+		finally {
+			if (rs != null) {
+				try {
+					rs.close();
+				} catch (Exception e) {
+				}
+				rs = null;
+			}
+			if (stmt != null) {
+				try {
+					stmt.close();
+				} catch (Exception e) {
+				}
+				stmt = null;
+			}
+			if (currentCon != null) {
+				try {
+					currentCon.close();
+				} catch (Exception e) {
+				}
+				currentCon = null;
+			}
+		}
+		return bean;
+	}
+
+	public static UserBean updateCatByID(UserBean bean) {
+
+		Statement stmt = null;
+
+		int index = bean.getCatIndex();
+		String[] arr = bean.getCatIDArrList();
+		String id = arr[index];
+
+		String strVar1 = bean.getUpdateCatName();
+		String strVar2 = bean.getUpdateCatDesc();
+		String searchQuery = "UPDATE CATEGORIES SET CAT_NAME = '" + strVar1
+				+ "', CAT_DESCR = '" + strVar2 + "' WHERE CAT_ID = " + id;
+
+		System.out.println("Query: " + searchQuery);
+
+		try { // connect to DB
+			currentCon = ConnectionManager.getConnection();
+			stmt = currentCon.createStatement();
+			int i = stmt.executeUpdate(searchQuery);
+			bean.setValid(true);
+
+		} catch (Exception ex) {
+			System.out.println("Signup failed: An Exception has occurred! "
+					+ ex);
+		} // some exception handling
+		finally {
+			if (rs != null) {
+				try {
+					rs.close();
+				} catch (Exception e) {
+				}
+				rs = null;
+			}
+			if (stmt != null) {
+				try {
+					stmt.close();
+				} catch (Exception e) {
+				}
+				stmt = null;
+			}
+			if (currentCon != null) {
+				try {
+					currentCon.close();
+				} catch (Exception e) {
+				}
+				currentCon = null;
+			}
+		}
+		return bean;
+	}
+
+	public static UserBean deleteProdByID(UserBean bean) {
+		// TODO Auto-generated method stub
+		Statement stmt = null;
+
+		int index = Integer.parseInt(bean.getProdIndex());
+		String[] arr = bean.getProdIDArrList();
+		String id = arr[index];
+
+		String searchQuery = "DELETE FROM PRODUCTS WHERE PROD_ID = " + id;
+
+		System.out.println("Query: " + searchQuery);
+
+		try { // connect to DB
+			currentCon = ConnectionManager.getConnection();
+			stmt = currentCon.createStatement();
+			stmt.executeUpdate(searchQuery);
+			bean.setValid(true);
+
+		} catch (Exception ex) {
+			System.out.println("Signup failed: An Exception has occurred! "
+					+ ex);
+		} // some exception handling
+		finally {
+			if (rs != null) {
+				try {
+					rs.close();
+				} catch (Exception e) {
+				}
+				rs = null;
+			}
+			if (stmt != null) {
+				try {
+					stmt.close();
+				} catch (Exception e) {
+				}
+				stmt = null;
+			}
+			if (currentCon != null) {
+				try {
+					currentCon.close();
+				} catch (Exception e) {
+				}
+				currentCon = null;
+			}
+		}
+		return bean;
 	}
 
 }

@@ -105,8 +105,10 @@ public class LoginServlet extends HttpServlet {
 					 * user = UserDAO.productOwner(user);
 					 */
 					user = UserDAO.getAllCategories(user);
+					user = UserDAO.getAllProducts(user);
 					session = request.getSession(true);
 					response.sendRedirect("productOwner.jsp");
+					System.out.println("#$#$#$#$AFTER METHODS CASE2");
 
 				} else {
 					// not loggedin, must not procede
@@ -298,8 +300,10 @@ public class LoginServlet extends HttpServlet {
 					String index = request.getParameter("CatIndex");
 
 					user.setCatIndex(index);
-
-					user = UserDAO.deleteCatByID(user);
+					user.setUpdateCatName(request.getParameter("newname" + index));
+					user.setUpdateCatDesc(request.getParameter("newdesc" + index));
+					user = UserDAO.updateCatByID(user);
+					//user = UserDAO.deleteCatByID(user);
 					session = request.getSession(true);
 					user = UserDAO.getAllCategories(user);
 					response.sendRedirect("categoryOwner.jsp");
@@ -352,6 +356,67 @@ public class LoginServlet extends HttpServlet {
 					System.out.println("LoginServlet: 12");
 					response.sendRedirect("invalidLogin.jsp");
 				}
+			} catch (Throwable theException) {
+				System.out.println(theException);
+			}
+			break;
+		}
+		case 13:
+		{
+			System.out.println("CASE 13: UPDATE PROD");
+			try {
+				
+				if (user.isValid()) {
+					System.out.println("AM I VALID IN update");
+					
+					String index = request.getParameter("prodIndex");
+
+					
+					user.setProdIndex(index);
+					user.setUpdateProdName(request.getParameter("newProdname" + index));
+					user.setUpdateProdSKU(request.getParameter("newProdSKU" + index));
+					user.setUpdateProdPrice(request.getParameter("newProdPrice" + index));
+					user = UserDAO.updateProdByID(user);
+					user = UserDAO.getAllProducts(user);
+					System.out.println("DOOOOOO %^%$&^%&^");
+					//user = UserDAO.updateCatByID(user);
+					//user = UserDAO.deleteCatByID(user);
+					session = request.getSession(true);
+					user = UserDAO.getAllCategories(user);
+					response.sendRedirect("productOwner.jsp");
+					// logd-in page
+				} else {
+					System.out.println("LoginServlet: 5");
+					response.sendRedirect("invalidLogin.jsp");
+				}
+				// error page
+			} catch (Throwable theException) {
+				System.out.println(theException);
+			}
+			break;
+		}
+		case 14:
+		{
+			System.out.println("CASE 14: REMOVE PROD");
+			try {
+				System.out.println("TOP OF DELETE");
+				if (user.isValid()) {
+					System.out.println("AM I VALID IN DELETE");
+					String index = request.getParameter("ProdIndex");
+
+					user.setProdIndex(index);
+
+					user = UserDAO.deleteProdByID(user);
+					session = request.getSession(true);
+					user = UserDAO.getAllCategories(user);
+					user = UserDAO.getAllProducts(user);
+					response.sendRedirect("productOwner.jsp");
+					// logd-in page
+				} else {
+					System.out.println("LoginServlet: 14");
+					response.sendRedirect("invalidLogin.jsp");
+				}
+				// error page
 			} catch (Throwable theException) {
 				System.out.println(theException);
 			}

@@ -57,6 +57,12 @@ public class UserBean {
 	private String[] prodDescArray;
 	private String[] prodPriceArray;
 	private String[] confirmArr;
+	private String updateCatDesc;
+	private String updateCatName;
+	private String[] prodSKUArray;
+	private String updateProdName;
+	private String updateProdSKU;
+	private String updateProdPrice;
 
 	public String[] getCartProd() {
 		return cartProd;
@@ -313,15 +319,19 @@ public class UserBean {
 	}
 
 	public void setProdIndex(String index) {
+		System.out.println("Setting INDEX??????????" + index);
+		
 		prodIndex = index;
 	}
 
 	public String getProdIndex() {
+		System.out.println("GETTING INDEX!!!!!!!!" + prodIndex);
 		return prodIndex;
 	}
 
 	public void setProdNameArrList(String[] array) {
 		// TODO Auto-generated method stub
+		System.out.println("SET PROD NAME ARR LIST");
 		prodNameArray = array;
 	}
 
@@ -346,12 +356,22 @@ public class UserBean {
 
 	public String[] getProdNameArrList() {
 		// TODO Auto-generated method stub
+		System.out.println("IN PROD NAME ARR LIST");
 		return prodNameArray;
 	}
 
 	public String[] getProdPriceArrList() {
 		// TODO Auto-generated method stub
 		return prodPriceArray;
+	}
+
+	public void setProdSKUArrList(String[] array) {
+		// TODO Auto-generated method stub
+		prodSKUArray = array;
+	}
+	public String[] getProdSKUArrList()
+	{
+		return prodSKUArray;
 	}
 
 	public void setProdPriceArray(String[] array) {
@@ -372,5 +392,61 @@ public class UserBean {
 	public String getCartProdID() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	public String getUpdateCatName() {
+		// TODO Auto-generated method stub
+		return updateCatName;
+	}
+
+	public String getUpdateCatDesc() {
+		// TODO Auto-generated method stub
+		return updateCatDesc;
+	}
+
+	public void setUpdateCatName(String parameter) {
+		// TODO Auto-generated method stub
+		updateCatName = parameter;
+	}
+
+	public void setUpdateCatDesc(String parameter) {
+		// TODO Auto-generated method stub
+		updateCatDesc = parameter;
+	}
+
+	public String getUpdateProdName() {
+		// TODO Auto-generated method stub
+		return updateProdName;
+		
+	}
+
+	public String getUpdateProdSKU() {
+		// TODO Auto-generated method stub
+		return updateProdSKU;
+		
+	}
+
+	public String getUpdateProdPrice() {
+		// TODO Auto-generated method stub
+		return updateProdPrice;
+		
+	}
+	
+	public void setUpdateProdName(String parameter) {
+		// TODO Auto-generated method stub
+		updateProdName = parameter;
+		
+	}
+
+	public void setUpdateProdSKU(String parameter) {
+		// TODO Auto-generated method stub
+		updateProdSKU = parameter;
+		
+	}
+
+	public void setUpdateProdPrice(String parameter) {
+		// TODO Auto-generated method stub
+		updateProdPrice = parameter;
+		
 	}
 }
