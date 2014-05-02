@@ -7,21 +7,21 @@ import java.sql.*;
 public class UserDAO {
 	static Connection currentCon = null;
 	static ResultSet rs = null;
-	
-	public static UserBean deleteCatByID(UserBean bean)
-	{
-		//get the index
-		//get the id arr
-		//setup sql conn
-		
-		/* DELETE FROM CATEGORIES WHERE CAT_ID = 1 
-		   AND 1 NOT IN (SELECT PROD_CAT_ID FROM PRODUCTS)*/
+
+	public static UserBean deleteCatByID(UserBean bean) {
+		// get the index
+		// get the id arr
+		// setup sql conn
+
+		/*
+		 * DELETE FROM CATEGORIES WHERE CAT_ID = 1 AND 1 NOT IN (SELECT
+		 * PROD_CAT_ID FROM PRODUCTS)
+		 */
 		Statement stmt = null;
 
 		int index = bean.getCatIndex();
 		String[] arr = bean.getCatIDArrList();
 		String id = arr[index];
-	
 
 		/*
 		 * INSERT INTO THE_USER (USER_NAME, USER_ROLE, USER_AGE, USER_STATE)
@@ -32,8 +32,8 @@ public class UserDAO {
 		// INSERT INTO THE_USER (USER_NAME, USER_ROLE, USER_AGE, USER_STATE)
 		// VALUES ( 'Trent', 'Owner', 37, 'CA' );
 
-		String searchQuery = "DELETE FROM CATEGORIES WHERE CAT_ID = "+ id 
-				+" AND "+ id +" NOT IN (SELECT PROD_CAT_ID FROM PRODUCTS)";
+		String searchQuery = "DELETE FROM CATEGORIES WHERE CAT_ID = " + id
+				+ " AND " + id + " NOT IN (SELECT PROD_CAT_ID FROM PRODUCTS)";
 
 		/*
 		 * String searchQuery =
@@ -43,11 +43,11 @@ public class UserDAO {
 
 		// "System.out.println" prints in the console; Normally used to trace
 		// the process
-		//System.out.println("Signup UserDAO");
-		//System.out.println("Your user name is: " + username);
-		//System.out.println("Your age is: " + age);
-		//System.out.println("Your role is: " + role);
-		//System.out.println("Your state is: " + state);
+		// System.out.println("Signup UserDAO");
+		// System.out.println("Your user name is: " + username);
+		// System.out.println("Your age is: " + age);
+		// System.out.println("Your role is: " + role);
+		// System.out.println("Your state is: " + state);
 
 		System.out.println("Query: " + searchQuery);
 
@@ -56,7 +56,6 @@ public class UserDAO {
 			stmt = currentCon.createStatement();
 			stmt.executeUpdate(searchQuery);
 			bean.setValid(true);
-			
 
 			// boolean more = rs.next(); // if user does not exist set the
 			// isValid variable to false
@@ -107,7 +106,9 @@ public class UserDAO {
 		ArrayList<String> prodIDArrList = new ArrayList<String>();
 		ArrayList<String> prodDescArrList = new ArrayList<String>();
 		ArrayList<String> prodNameArrList = new ArrayList<String>();
-
+		ArrayList<String> prodSKUArrList = new ArrayList<String>();
+		ArrayList<String> prodPriceArrList = new ArrayList<String>();
+		ArrayList<String> prodCatArrList = new ArrayList<String>();
 		// do sql
 		Statement stmt = null;
 		String searchQuery = "SELECT * from PRODUCTS, CATEGORIES WHERE PROD_CAT_ID = CAT_ID"
@@ -139,6 +140,12 @@ public class UserDAO {
 
 					prodIDArrList.add(rs.getString("PROD_ID"));
 
+					prodCatArrList.add(rs.getString("PROD_CAT_ID"));
+
+					prodPriceArrList.add(rs.getString("PROD_PRICE"));
+
+					prodSKUArrList.add(rs.getString("PROD_SKU"));
+
 					bean.setValid(true);
 				}
 			}
@@ -150,17 +157,27 @@ public class UserDAO {
 						.toArray(new String[prodIDArrList.size()]));
 				bean.setProdDescArr(prodDescArrList
 						.toArray(new String[prodDescArrList.size()]));
+
+				bean.setprodSkuArr(prodSKUArrList);
+				bean.setprodCatArr(prodCatArrList);
+				bean.setprodPriArr(prodPriceArrList);
 			} else {
 				System.out.println("Name is null");
 				prodNameArrList.add("No Results Found In This Search");
 				prodNameArrList.add("No Results Found In This Search");
 				prodNameArrList.add("No Results Found In This Search");
+				prodCatArrList.add("No Results Found In This Search");
+				prodPriceArrList.add("No Results Found In This Search");
+				prodSKUArrList.add("No Results Found In This Search");
 				bean.setProdNameArr(prodNameArrList
 						.toArray(new String[prodNameArrList.size()]));
 				bean.setProdIDArr(prodIDArrList
 						.toArray(new String[prodIDArrList.size()]));
 				bean.setProdDescArr(prodDescArrList
 						.toArray(new String[prodDescArrList.size()]));
+				bean.setprodSkuArr(prodSKUArrList);
+				bean.setprodCatArr(prodCatArrList);
+				bean.setprodPriArr(prodPriceArrList);
 
 			}
 		} catch (Exception ex) {
@@ -205,8 +222,26 @@ public class UserDAO {
 
 		// do sql
 		Statement stmt = null;
-		String searchQuery = "SELECT * from PRODUCTS WHERE LOWER(PROD_NAME) LIKE LOWER('%"
-				+ str + "%') OR LOWER(PROD_DESCR) LIKE LOWER('%" + str + "%')";
+		String searchQuery = new String();
+
+		if (bean.getProdCatSearchStr().equals("All")) {
+			searchQuery = "SELECT * from PRODUCTS WHERE LOWER(PROD_NAME) LIKE LOWER('%"
+					+ str
+					+ "%') OR LOWER(PROD_DESCR) LIKE LOWER('%"
+					+ str
+					+ "%')";
+		} else {
+			searchQuery = "SELECT * from PRODUCTS, CATEGORIES WHERE (LOWER(PROD_NAME)"
+					+ " LIKE LOWER('%"
+					+ str
+					+ "%') OR LOWER(PROD_DESCR) LIKE LOWER('%"
+					+ str
+					+ "%') ) AND PROD_ID = " + bean.getProdCatSearchStr();
+		}
+
+		if (str == null || str.equals("")) {
+			searchQuery = "SELECT * FROM PRODUCTS";
+		}
 		System.out.println("Query: " + searchQuery);
 
 		try {

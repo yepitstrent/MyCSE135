@@ -223,6 +223,7 @@ public class LoginServlet extends HttpServlet {
 					System.out.println("AM I VALID");
 
 					user.setProdSearchStr(request.getParameter("prodname"));
+					user.setProdCatSearchStr(request.getParameter("catListForProdWithText"));
 					System.out.println("IN CASE7 "
 							+ request.getParameter("prodname"));
 					user = UserDAO.getProdFromString(user);

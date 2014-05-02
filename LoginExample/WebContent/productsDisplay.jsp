@@ -32,8 +32,7 @@
 				String strCat = currentUser.getRole();
 				System.out.println(currentUser.getRole());
 				if (strCat.equals("owner")) {
-			%>Add/Delete a Category:<input
-				type="submit" value="Category"><br>
+			%>Add/Delete a Category:<input type="submit" value="Category"><br>
 			<%
 				} else {
 			%>
@@ -48,8 +47,7 @@
 				String strProd = currentUser.getRole();
 				System.out.println(currentUser.getRole());
 				if (strProd.equals("owner")) {
-			%>Add/Delete a Product:<input
-				type="submit" value="Product"><br>
+			%>Add/Delete a Product:<input type="submit" value="Product"><br>
 			<%
 				} else {
 			%>
@@ -82,26 +80,47 @@
 		</form>
 
 		<form action=LoginServlet>
-			Search By Product Name: <input type="text" name="prodname" /> <input
-				type="submit" value="Submit"> <input type="hidden" name="st"
-				value="7">
+			Search By Product And Category:<Select name="catListForProdWithText" size="1">
+			<option value="All">All</option>
+				<%
+					for (i = 0; i < strName.length; i++) {
+						out.print("<option value=\"" + strID[i] + "\">" + strName[i]
+								+ "</option>");
+					}
+				%>
+			</Select> <input type="text" name="prodname" /> <input type="submit"
+				value="Submit"> <input type="hidden" name="st" value="7">
 		</form>
 
 		<%
 			String[] prodName = currentUser.getProdNameArr().clone();
-		%>
-		<%
-			String[] prodDesc = currentUser.getProdDescArr().clone();
-		%>
-		<%
-			String[] prodID = currentUser.getProdIDArr().clone();
+			String[] prodSku = currentUser.getprodSkuArr().clone();
+			String[] prodCat = currentUser.getprodCatArr().clone();
+			String[] prodPri = currentUser.getprodPriArr().clone();
 		%>
 
 		Product List:
 		<%
-			for (i = 0; i < prodID.length; i++) {
-				out.print("<p> id: " + prodID[i] + " name: " + prodName[i]
-						+ " description: " + prodDesc[i] + " </p>");
+			for (i = 0; i < prodName.length; i++) {
+				out.print(" <tr><form><th><input value=\" "
+						+ prodName[i]
+						+ " \" name=\"name"
+						+ i
+						+ "\" size=\"10\"/ readonly></th><th><input value=\""
+						+ prodSku[i]
+						+ " \" name=\"sku"
+						+ i
+						+ "\" size=\"10\"/ readonly></th><th><input value=\""
+						+ prodCat[i]
+						+ " \" name=\"cat"
+						+ i
+						+ "\" size=\"10\"/ readonly></th><th><input value=\""
+						+ prodPri[i]
+						+ "\" name=\"pri"
+						+ i
+						+ "\" size=\"30\"/ readonly></th><th><input type=\"submit\" name=\"addToCart"
+						+ i + "\" value=\"Add to Cart\" />"
+						+ "</th></form></tr>");
 			}
 		%>
 		<!-- Clear the arrays in case next search doesn't execute a query -->

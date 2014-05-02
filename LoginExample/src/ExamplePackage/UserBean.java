@@ -29,24 +29,54 @@ public class UserBean {
 	private String[] prodDescArr;
 	private String[] prodIDArr;
 
+	private String[] prodSkuArr;
+	private String[] prodCatArr;
+	private String[] prodPriArr;
+
 	private String prodSearchCat;
 	private int catIndex;
 
 	public boolean valid;
+	private String prodCatSearchStr;
 	
-	public void setCatIndex(String index)
-	{
+	public String[] getprodSkuArr() {
+		return prodSkuArr;
+	}
+
+	public String[] getprodCatArr() {
+		return prodCatArr;
+	}
+
+	public String[] getprodPriArr() {
+		return prodPriArr;
+	}
+
+	public void setprodSkuArr(ArrayList<String> a) {
+		prodSkuArr = a.toArray(new String[a.size()]);
+	}
+
+	public void setprodCatArr(ArrayList<String> a) {
+		prodCatArr = a.toArray(new String[a.size()]);
+	}
+
+	public void setprodPriArr(ArrayList<String> a) {
+		prodPriArr = a.toArray(new String[a.size()]);
+	}
+
+
+
+	public void setCatIndex(String index) {
 		catIndex = Integer.parseInt(index);
 	}
-	public int getCatIndex()
-	{
+
+	public int getCatIndex() {
 		return catIndex;
 	}
 
 	public void deleteCatByIndex(String str) {
-		
+
 	}
-	
+
 	public void setProdSearchCat(String parameter) {
 		prodSearchCat = parameter;
 	}
@@ -239,6 +269,13 @@ public class UserBean {
 		prodSearchStr = newProdSearchStr;
 	}
 
-
+	public void setProdCatSearchStr(String str) {
+		prodCatSearchStr = str;
+		
+	}
+	public String getProdCatSearchStr()
+	{
+		return prodCatSearchStr;
+	}
 
 }
