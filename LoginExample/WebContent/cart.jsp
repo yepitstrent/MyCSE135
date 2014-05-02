@@ -15,26 +15,34 @@
 	%>
 	Welcome
 	<%=currentUser.getUsername()%>
+	<form action=LoginServlet>
+		<input type="submit" value="Logout"><br> <input
+			type="hidden" name="st" value="default">
+	</form>
+	<form action=userLogged.jsp>
+		<input type="submit" value="Go Back">
+	</form>
 	<h1>Items in your cart:</h1>
 
 	<%
-	    //get the prodNameCart
-		String[] prodNamCart = { "yo", "yo" };//currentUser.getProdNamCartArr().clone();
-		String[] prodPriCart = { "yo", "yo" };//currentUser.getprodPriCartArr().clone();
+		//get the prodNameCart
+		String[] prodNamCart = currentUser.getCartPric().clone();
+		String[] prodPriCart = currentUser.getCartProd().clone();
+		//currentUser.
+		System.out.println("GOT THE ARRAYS" + prodNamCart.length);
+		String[] nameBought = prodNamCart.clone();
+		System.out.println("HERERERERER??????");
+		currentUser.setConfirmation(nameBought);
 	%>
 
 	Product List:
 	<%
 		int i = 0;
 		for (i = 0; i < prodNamCart.length; i++) {
-			out.print(" <tr><form><th><input value=\" "
-					+ prodNamCart[i]
-					+ " \" name=\"name"
-					+ i
+			out.print(" <tr><form><th><input value=\" " + prodNamCart[i]
+					+ " \" name=\"name" + i
 					+ "\" size=\"10\"/ readonly></th><th><input value=\""
-					+ prodPriCart[i]
-					+ "\" name=\"pri"
-					+ i
+					+ prodPriCart[i] + "\" name=\"pri" + i
 					+ "\" size=\"10\"/ readonly></th><th>"
 					+ "</th></form></tr>");
 		}
@@ -44,10 +52,10 @@
 	<%
 		out.print(currentUser.getCartTotal());
 	%>
-	<form action=comfirmation.jsp>
-		Enter Cred Card Info: <input type="text" name="creditCard" /> <input
+	<form action=LoginServlet>
+		Enter Credit Card Info: <input type="text" name="creditCard" /> <input
 			type="submit" value="Purchase"> <input type="hidden"
-			name="st" value="20">
+			name="st" value="12">
 	</form>
 </body>
 </html>

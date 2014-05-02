@@ -539,15 +539,14 @@ public class UserDAO {
 		return bean;
 	}
 
-	public static UserBean getAllProducts(UserBean bean)
-	{
+	public static UserBean getAllProducts(UserBean bean) {
 		boolean flag = false;
 		Statement stmt = null;
 		ArrayList<String> prodNameArrList = new ArrayList<String>();
 		ArrayList<String> prodPriceArrList = new ArrayList<String>();// need
-																	// setters
-																	// and
-																	// getters
+																		// setters
+																		// and
+																		// getters
 		ArrayList<String> prodIDArrList = new ArrayList<String>();
 
 		String searchQuery = "SELECT * from PRODUCTS";
@@ -568,7 +567,7 @@ public class UserDAO {
 				} // if user exists set the isValid variable to true
 				else if (more) {
 					flag = true;
-					//System.out.println(rs.getString("PROD_ID"));
+					// System.out.println(rs.getString("PROD_ID"));
 					prodNameArrList.add(rs.getString("PROD_NAME"));
 					prodPriceArrList.add(rs.getString("PROD_PRICE"));
 					prodIDArrList.add(rs.getString("PROD_ID"));
@@ -578,16 +577,22 @@ public class UserDAO {
 			}
 			if (flag) {
 				System.out.println("Setting cat arr list to bean");
-				bean.setProdNameArrList(prodNameArrList.toArray(new String[prodNameArrList.size()]));
-				bean.setProdIDArrList(prodIDArrList.toArray(new String[prodIDArrList.size()]));
-				bean.setProdPriceArray(prodPriceArrList.toArray(new String[prodPriceArrList.size()]));
+				bean.setProdNameArrList(prodNameArrList
+						.toArray(new String[prodNameArrList.size()]));
+				bean.setProdIDArrList(prodIDArrList
+						.toArray(new String[prodIDArrList.size()]));
+				bean.setProdPriceArray(prodPriceArrList
+						.toArray(new String[prodPriceArrList.size()]));
 			} else {
 				prodNameArrList.add(" ");
 				prodPriceArrList.add(" ");
 				prodIDArrList.add(" ");
-				bean.setProdNameArrList(prodNameArrList.toArray(new String[prodNameArrList.size()]));
-				bean.setProdIDArrList(prodIDArrList.toArray(new String[prodIDArrList.size()]));
-				bean.setProdDescArray(prodPriceArrList.toArray(new String[prodPriceArrList.size()]));
+				bean.setProdNameArrList(prodNameArrList
+						.toArray(new String[prodNameArrList.size()]));
+				bean.setProdIDArrList(prodIDArrList
+						.toArray(new String[prodIDArrList.size()]));
+				bean.setProdDescArray(prodPriceArrList
+						.toArray(new String[prodPriceArrList.size()]));
 
 			}
 		} catch (Exception ex) {
@@ -619,7 +624,7 @@ public class UserDAO {
 		}
 		return bean;
 	}
-	
+
 	public static UserBean getAllCategories(UserBean bean) {
 		boolean flag = false;
 		Statement stmt = null;
@@ -969,25 +974,65 @@ public class UserDAO {
 	}
 
 	public static UserBean getCartTotal(UserBean bean) {
+		System.out.println("CART TOT " + bean.getUserID() + "&^%&^&^&*&*&");
 		Statement stmt = null;
-		String searchQuery = "select sum(cart_prod_price) from cart";
+		String sumQuery = "select sum(cart_prod_price) from cart WHERE cart_id = "
+				+ bean.getUserID() + ";";
 
-		String searchQ = "";
+		System.out.println("SECOND");
+		String namQuery = "select prod_name, cart_prod_price from products, cart "
+				+ "WHERE(prod_id = cart_prod_id AND cart_id = "
+				+ bean.getUserID() + " );";
+
+		ArrayList<String> name = new ArrayList<String>();
+		ArrayList<String> pric = new ArrayList<String>();
 
 		try { // connect to DB
 			currentCon = ConnectionManager.getConnection();
 			stmt = currentCon.createStatement();
-			rs = stmt.executeQuery(searchQuery);
-			boolean more = rs.next();
+			rs = stmt.executeQuery(namQuery);
+			boolean more;
+
+			boolean flag = false;
+			while (more = rs.next()) {
+				if (!more) {
+					System.out
+							.println("Sorry, you are not a registered user! Please sign up first");
+					bean.setValid(false);
+				} // if user exists set the isValid variable to true
+				else if (more) {
+					flag = true;
+					System.out.println("adding shit&&&&&&&&&&&&&&&&&&&&&&&");
+					name.add(rs.getString("PROD_NAME"));
+					pric.add(rs.getString("CART_PROD_PRICE"));
+					bean.setValid(true);
+				}
+			}
+			if (flag) {
+				System.out.println("Setting cat arr list to bean");
+				bean.setCartPric(name);
+				bean.setCartProd(pric);
+			} else {
+				name.add(" ");
+				pric.add(" ");
+				bean.setCartPric(name);
+				bean.setCartProd(pric);
+			}
+
+			rs = stmt.executeQuery(sumQuery);
+			more = rs.next();
+
 			if (!more) {
 				System.out
 						.println("Sorry, you are not a registered user! Please sign up first");
 				bean.setValid(false);
 			} // if user exists set the isValid variable to true
 			else if (more) {
+
 				bean.setCartTotal(Integer.parseInt(rs.getString("SUM")));
 				bean.setValid(true);
 			}
+
 		} catch (Exception ex) {
 			System.out.println("Log In failed: An Exception has occurred! "
 					+ ex);
@@ -1028,9 +1073,22 @@ public class UserDAO {
 		System.out.println("Did I make it this far?" + index);
 		String prodId = idArr[Integer.parseInt(index)];
 
+		/*String searchQuery = "INSERT INTO CART "
+				+ "( CART_ID, CART_PROD_ID, CART_PROD_PRICE ) " + "VALUES("
+				+ bean.getUserID() + ", " + prodId + ", "
+				+ priceArr[Integer.parseInt(index)] + " )";*/
+
 		String searchQuery = "INSERT INTO CART "
 				+ "( CART_ID, CART_PROD_ID, CART_PROD_PRICE ) "
-				+ "VALUES("+ bean.getUserID() +", "+ prodId +", " + priceArr[Integer.parseInt(index)] + " )";
+				+ "SELECT * FROM (SELECT "
+				+ bean.getUserID()
+				+ ", "
+				+ prodId
+				+ ", "
+				+ priceArr[Integer.parseInt(index)]
+				+ " ) AS tmp "
+				+ "WHERE NOT EXISTS (SELECT CART_PROD_ID FROM CART WHERE CART_PROD_ID = "
+				+ prodId + " ) LIMIT 1";
 
 		System.out.println("Query: " + searchQuery);
 
@@ -1071,6 +1129,68 @@ public class UserDAO {
 			}
 		}
 		return bean;
+	}
+
+	public static UserBean checkOut(UserBean bean) {
+	
+		// preparing some objects for connection
+				Statement stmt = null;
+				String searchQuery = "DELETE from CART where CART_ID="
+						+ bean.getUserID();
+				
+/* DELETE FROM PRODUCTS WHERE PROD_ID IN (SELECT CART_PROD_ID FROM CART WHERE CART_ID = 3);*/
+				String otherQuery = "DELETE FROM PRODUCTS WHERE PROD_ID IN "
+                     +"(SELECT CART_PROD_ID FROM CART WHERE CART_ID = "
+						+ bean.getUserID() + ")";
+
+				try { // connect to DB
+					currentCon = ConnectionManager.getConnection();
+					stmt = currentCon.createStatement();
+					System.out.println("1 $$$$$$$$$$$$$$$$$$$$$");
+					int i = stmt.executeUpdate(otherQuery);
+					System.out.println("2 $$$$$$$$$$$$$$$$$$$$$");
+					int j = stmt.executeUpdate(searchQuery);
+					System.out.println("3 $$$$$$$$$$$$$$$$$$$$$");
+//					boolean more = rs.next(); // if user does not exist set the isValid
+												// variable to false
+
+					if (false) {
+						System.out
+								.println("Sorry, you are not a registered user! Please sign up first");
+						bean.setValid(false);
+					} // if user exists set the isValid variable to true
+					else if (true) {
+
+						bean.setValid(true);
+					}
+				} catch (Exception ex) {
+					System.out.println("Log In failed: An Exception has occurred! "
+							+ ex);
+				} // some exception handling
+				finally {
+					if (rs != null) {
+						try {
+							rs.close();
+						} catch (Exception e) {
+						}
+						rs = null;
+					}
+					if (stmt != null) {
+						try {
+							stmt.close();
+						} catch (Exception e) {
+						}
+						stmt = null;
+					}
+					if (currentCon != null) {
+						try {
+							currentCon.close();
+						} catch (Exception e) {
+						}
+						currentCon = null;
+					}
+				}
+				return bean;
 	}
 
 }

@@ -61,30 +61,18 @@
 
 		<h1>Products Browsing Page</h1>
 
-		<form action=LoginServlet>
-			<%
-				String[] strName = currentUser.getCatNameArrList().clone();
-			%>
-			<%
-				String[] strID = currentUser.getCatIDArrList().clone();
-			%>
-			Select a Category: <Select name="catListForProd" size="1">
 
-				<%
-					int i = 0;
-					for (i = 0; i < strName.length; i++) {
-						out.print("<option value=\"" + strID[i] + "\">" + strName[i]
-								+ "</option>");
-					}
-				%>
-			</Select> <input type="submit" value="Submit"> <input type="hidden"
-				name="st" value="8">
-		</form>
-
+		<%
+			String[] strName = currentUser.getCatNameArrList().clone();
+		%>
+		<%
+			String[] strID = currentUser.getCatIDArrList().clone();
+		%>
 		<form action=LoginServlet>
-			Search By Product And Category:<Select name="catListForProdWithText" size="1"><option
-					value="All">All</option>
+			Search By Product And Category:<Select name="catListForProdWithText"
+				size="1"><option value="All">All</option>
 				<%
+					int i;
 					for (i = 0; i < strName.length; i++) {
 						out.print("<option value=\"" + strID[i] + "\">" + strName[i]
 								+ "</option>");

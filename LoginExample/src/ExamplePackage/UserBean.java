@@ -56,6 +56,7 @@ public class UserBean {
 	private String[] prodIDArray;
 	private String[] prodDescArray;
 	private String[] prodPriceArray;
+	private String[] confirmArr;
 
 	public String[] getCartProd() {
 		return cartProd;
@@ -357,5 +358,19 @@ public class UserBean {
 		// TODO Auto-generated method stub
 		prodPriceArray = array;
 	}
+	
+	public void setConfirmation(String[] arr)
+	{
+		confirmArr = arr.clone();
+	}
 
+	public String[] getConfirmation()
+	{
+		return confirmArr;
+	}
+
+	public String getCartProdID() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

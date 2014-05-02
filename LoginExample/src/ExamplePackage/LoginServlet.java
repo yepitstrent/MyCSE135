@@ -290,18 +290,41 @@ public class LoginServlet extends HttpServlet {
 		}
 		case 10: {
 			System.out.println("IN UPDATE CAT");
+			try {
+				System.out.println("TOP OF update");
+				if (user.isValid()) {
+					System.out.println("AM I VALID IN update");
+					
+					String index = request.getParameter("CatIndex");
+
+					user.setCatIndex(index);
+
+					user = UserDAO.deleteCatByID(user);
+					session = request.getSession(true);
+					user = UserDAO.getAllCategories(user);
+					response.sendRedirect("categoryOwner.jsp");
+					// logd-in page
+				} else {
+					System.out.println("LoginServlet: 5");
+					response.sendRedirect("invalidLogin.jsp");
+				}
+				// error page
+			} catch (Throwable theException) {
+				System.out.println(theException);
+			}
+			break;
 		}
 		case 11: {
 			System.out.println("IN CASE 11: ADD PRODUCT TO CART");
 			try {
-				
+
 				if (user.isValid()) {
 					String index = request.getParameter("prodIndex");
 					user.setProdIndex(index);
 					user = UserDAO.getAllProducts(user);
-					//user = UserDAO.getCartTotal(user);
+					// user = UserDAO.getCartTotal(user);
 					user = UserDAO.addProductToCart(user);
-					
+
 					response.sendRedirect("productsDisplay.jsp");
 				} else {
 					System.out.println("LoginServlet: 9");
@@ -312,6 +335,27 @@ public class LoginServlet extends HttpServlet {
 			}
 			break;
 			// look at delete cat
+		}
+		case 12: {
+			System.out.println("CHECK OUT");
+			try {
+
+				if (user.isValid()) {
+					// String index = request.getParameter("prodIndex");
+					// user.setProdIndex(index);
+					// user = UserDAO.getAllProducts(user);
+					// user = UserDAO.getCartTotal(user);
+					user = UserDAO.checkOut(user);
+
+					response.sendRedirect("confirmation.jsp");
+				} else {
+					System.out.println("LoginServlet: 12");
+					response.sendRedirect("invalidLogin.jsp");
+				}
+			} catch (Throwable theException) {
+				System.out.println(theException);
+			}
+			break;
 		}
 		default: {
 			System.out.println("DEFAULT");
