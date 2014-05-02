@@ -539,6 +539,87 @@ public class UserDAO {
 		return bean;
 	}
 
+	public static UserBean getAllProducts(UserBean bean)
+	{
+		boolean flag = false;
+		Statement stmt = null;
+		ArrayList<String> prodNameArrList = new ArrayList<String>();
+		ArrayList<String> prodPriceArrList = new ArrayList<String>();// need
+																	// setters
+																	// and
+																	// getters
+		ArrayList<String> prodIDArrList = new ArrayList<String>();
+
+		String searchQuery = "SELECT * from PRODUCTS";
+		System.out.println("Query: " + searchQuery);
+
+		try { // connect to DB
+			currentCon = ConnectionManager.getConnection();
+			stmt = currentCon.createStatement();
+			rs = stmt.executeQuery(searchQuery);
+			boolean more; // = rs.next(); // if user does not exist set the
+							// isValid variable to false
+
+			while (more = rs.next()) {
+				if (!more) {
+					System.out
+							.println("IN HERER Sorry, you are not a registered user! Please sign up first");
+					bean.setValid(false);
+				} // if user exists set the isValid variable to true
+				else if (more) {
+					flag = true;
+					//System.out.println(rs.getString("PROD_ID"));
+					prodNameArrList.add(rs.getString("PROD_NAME"));
+					prodPriceArrList.add(rs.getString("PROD_PRICE"));
+					prodIDArrList.add(rs.getString("PROD_ID"));
+
+					bean.setValid(true);
+				}
+			}
+			if (flag) {
+				System.out.println("Setting cat arr list to bean");
+				bean.setProdNameArrList(prodNameArrList.toArray(new String[prodNameArrList.size()]));
+				bean.setProdIDArrList(prodIDArrList.toArray(new String[prodIDArrList.size()]));
+				bean.setProdPriceArray(prodPriceArrList.toArray(new String[prodPriceArrList.size()]));
+			} else {
+				prodNameArrList.add(" ");
+				prodPriceArrList.add(" ");
+				prodIDArrList.add(" ");
+				bean.setProdNameArrList(prodNameArrList.toArray(new String[prodNameArrList.size()]));
+				bean.setProdIDArrList(prodIDArrList.toArray(new String[prodIDArrList.size()]));
+				bean.setProdDescArray(prodPriceArrList.toArray(new String[prodPriceArrList.size()]));
+
+			}
+		} catch (Exception ex) {
+			System.out.println("Log In failed: An Exception has occurred! "
+					+ ex);
+		} // some exception handling
+		finally {
+			if (rs != null) {
+				try {
+					rs.close();
+				} catch (Exception e) {
+				}
+				rs = null;
+			}
+			if (stmt != null) {
+				try {
+					stmt.close();
+				} catch (Exception e) {
+				}
+				stmt = null;
+			}
+			if (currentCon != null) {
+				try {
+					currentCon.close();
+				} catch (Exception e) {
+				}
+				currentCon = null;
+			}
+		}
+		return bean;
+	}
+	
 	public static UserBean getAllCategories(UserBean bean) {
 		boolean flag = false;
 		Statement stmt = null;
@@ -942,11 +1023,14 @@ public class UserDAO {
 
 		Statement stmt = null;
 		String index = bean.getProdIndex();
-		//String[]
+		String[] idArr = bean.getProdIDArrList();
+		String[] priceArr = bean.getProdPriceArrList();
+		System.out.println("Did I make it this far?" + index);
+		String prodId = idArr[Integer.parseInt(index)];
 
 		String searchQuery = "INSERT INTO CART "
-				+ "( CART_ID, CART_PROD_ID, CART_PROD, CART_PROD_PRICE ) "
-				+ "VALUES()";
+				+ "( CART_ID, CART_PROD_ID, CART_PROD_PRICE ) "
+				+ "VALUES("+ bean.getUserID() +", "+ prodId +", " + priceArr[Integer.parseInt(index)] + " )";
 
 		System.out.println("Query: " + searchQuery);
 

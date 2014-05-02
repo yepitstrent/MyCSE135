@@ -52,6 +52,10 @@ public class UserBean {
 	private String[] cartProd;
 	private String[] cartPric;
 	private String prodIndex;
+	private String[] prodNameArray;
+	private String[] prodIDArray;
+	private String[] prodDescArray;
+	private String[] prodPriceArray;
 
 	public String[] getCartProd() {
 		return cartProd;
@@ -313,6 +317,45 @@ public class UserBean {
 
 	public String getProdIndex() {
 		return prodIndex;
+	}
+
+	public void setProdNameArrList(String[] array) {
+		// TODO Auto-generated method stub
+		prodNameArray = array;
+	}
+
+	public void setProdIDArrList(String[] array) {
+		// TODO Auto-generated method stub
+		System.out.println("setting ID HERRE" + array[0]);
+		
+		prodIDArray = array.clone();
+	}
+
+	public void setProdDescArray(String[] array) {
+		// TODO Auto-generated method stub
+		prodDescArray = array.clone();
+	}
+
+	public String[] getProdIDArrList() {
+		// TODO Auto-generated method stub
+		System.out.println("getting ID HERE");
+		
+		return prodIDArray;
+	}
+
+	public String[] getProdNameArrList() {
+		// TODO Auto-generated method stub
+		return prodNameArray;
+	}
+
+	public String[] getProdPriceArrList() {
+		// TODO Auto-generated method stub
+		return prodPriceArray;
+	}
+
+	public void setProdPriceArray(String[] array) {
+		// TODO Auto-generated method stub
+		prodPriceArray = array;
 	}
 
 }
