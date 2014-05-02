@@ -30,9 +30,23 @@ public class UserBean {
 	private String[] prodIDArr;
 
 	private String prodSearchCat;
+	private int catIndex;
 
 	public boolean valid;
+	
+	public void setCatIndex(String index)
+	{
+		catIndex = Integer.parseInt(index);
+	}
+	public int getCatIndex()
+	{
+		return catIndex;
+	}
 
+	public void deleteCatByIndex(String str) {
+		
+	}
+	
 	public void setProdSearchCat(String parameter) {
 		prodSearchCat = parameter;
 	}
@@ -224,5 +238,7 @@ public class UserBean {
 	public void setProdSearchStr(String newProdSearchStr) {
 		prodSearchStr = newProdSearchStr;
 	}
+
+
 
 }

@@ -55,15 +55,15 @@
 						+ strDesc[i]
 						+ "\" name=\"desc"
 						+ i
-						+ "\" size=\"30\"/></th><th>"
-						+ "<form style='display:inline'><input type=\"submit\" name=\"updatecat"
+						+ "\" size=\"40\"/></th><th>"
+						+ "<form action=LoginServlet><input type=\"submit\" name=\"updatecat"
 						+ i
 						+ "\" value=\"Update\" />"
 						+ "<input type=\"hidden\" name=\"CatIndex\" value=\""
 						+ i
 						+ "\" >"
 						+ "<input type=\"hidden\" name=\"st\" value=\"10\" ></form>"
-						+ "<form style='display:inline'><input type=\"submit\" name=\"remove"
+						+ "<form action=LoginServlet><input type=\"submit\" name=\"remove"
 						+ i
 						+ "\" value=\"Remove\" />"
 						+ "<input type=\"hidden\" name=\"CatIndex\" value=\""

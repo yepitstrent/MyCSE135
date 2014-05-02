@@ -7,6 +7,98 @@ import java.sql.*;
 public class UserDAO {
 	static Connection currentCon = null;
 	static ResultSet rs = null;
+	
+	public static UserBean deleteCatByID(UserBean bean)
+	{
+		//get the index
+		//get the id arr
+		//setup sql conn
+		
+		/* DELETE FROM CATEGORIES WHERE CAT_ID = 1 
+		   AND 1 NOT IN (SELECT PROD_CAT_ID FROM PRODUCTS)*/
+		Statement stmt = null;
+
+		int index = bean.getCatIndex();
+		String[] arr = bean.getCatIDArrList();
+		String id = arr[index];
+	
+
+		/*
+		 * INSERT INTO THE_USER (USER_NAME, USER_ROLE, USER_AGE, USER_STATE)
+		 * SELECT * FROM (SELECT 'Trent', 'Owner', 37, 'CA') AS tmp WHERE NOT
+		 * EXISTS ( SELECT USER_NAME FROM THE_USER WHERE USER_NAME = 'Trent' )
+		 * LIMIT 1;
+		 */
+		// INSERT INTO THE_USER (USER_NAME, USER_ROLE, USER_AGE, USER_STATE)
+		// VALUES ( 'Trent', 'Owner', 37, 'CA' );
+
+		String searchQuery = "DELETE FROM CATEGORIES WHERE CAT_ID = "+ id 
+				+" AND "+ id +" NOT IN (SELECT PROD_CAT_ID FROM PRODUCTS)";
+
+		/*
+		 * String searchQuery =
+		 * "INSERT INTO THE_USER (USER_NAME, USER_ROLE, USER_AGE, USER_STATE) VALUES ( '"
+		 * + username + "' ,'" + role + "', '" + age + "', '" + state + "' )";
+		 */
+
+		// "System.out.println" prints in the console; Normally used to trace
+		// the process
+		//System.out.println("Signup UserDAO");
+		//System.out.println("Your user name is: " + username);
+		//System.out.println("Your age is: " + age);
+		//System.out.println("Your role is: " + role);
+		//System.out.println("Your state is: " + state);
+
+		System.out.println("Query: " + searchQuery);
+
+		try { // connect to DB
+			currentCon = ConnectionManager.getConnection();
+			stmt = currentCon.createStatement();
+			stmt.executeUpdate(searchQuery);
+			bean.setValid(true);
+			
+
+			// boolean more = rs.next(); // if user does not exist set the
+			// isValid variable to false
+			// System.out.println(rs);
+			/*
+			 * if (!more) { System.out.println(
+			 * "Sorry, you are not a registered user! Please sign up first");
+			 * bean.setValid(false); }
+			 */// if user exists set the isValid variable to true
+			/*
+			 * else if (more) { System.out.println("Successful Signup Insert.");
+			 * bean.setValid(true); }
+			 */
+		} catch (Exception ex) {
+			System.out.println("Signup failed: An Exception has occurred! "
+					+ ex);
+		} // some exception handling
+		finally {
+			if (rs != null) {
+				try {
+					rs.close();
+				} catch (Exception e) {
+				}
+				rs = null;
+			}
+			if (stmt != null) {
+				try {
+					stmt.close();
+				} catch (Exception e) {
+				}
+				stmt = null;
+			}
+			if (currentCon != null) {
+				try {
+					currentCon.close();
+				} catch (Exception e) {
+				}
+				currentCon = null;
+			}
+		}
+		return bean;
+	}
 
 	public static UserBean getProdFromCat(UserBean bean) {
 		System.out.println("IN DAO GET PROD FM STRING");

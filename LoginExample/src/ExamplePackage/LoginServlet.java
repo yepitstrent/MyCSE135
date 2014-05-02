@@ -191,15 +191,19 @@ public class LoginServlet extends HttpServlet {
 
 		case 6: {
 			System.out.println("Delete Category");
-			try {
+			try {System.out.println("TOP OF DELETE");
 				if (user.isValid()) {
-					System.out.println("AM I VALID");
-					// user.setCatName(request.getParameter("CatIndex"));
-					// user = UserDAO.categoryOwner(user);
+					System.out.println("AM I VALID IN DELETE");
+					String index = request.getParameter("CatIndex");
+					String[] arr = user.getCatIDArrList();
+					System.out.println("%$%$%$%$%$%$%"+arr[Integer.parseInt(index)] + "(*(*(*");
+					user.setCatIndex(index);
+					
+					 user = UserDAO.deleteCatByID(user);
 					session = request.getSession(true);
 					user = UserDAO.getAllCategories(user);
-					response.sendRedirect("userLogged.jsp");
-					// logged-in page
+					response.sendRedirect("categoryOwner.jsp");
+					// logd-in page
 				} else {
 					System.out.println("LoginServlet: 5");
 					response.sendRedirect("invalidLogin.jsp");
