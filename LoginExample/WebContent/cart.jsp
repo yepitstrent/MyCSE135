@@ -5,9 +5,10 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Insert title here</title>
+<title>Shopping Cart</title>
 </head>
 <body>
+
 	<%
 		UserBean currentUser = (UserBean) (session
 				.getAttribute("currentSessionUser"));
@@ -15,5 +16,38 @@
 	Welcome
 	<%=currentUser.getUsername()%>
 	<h1>Items in your cart:</h1>
+
+	<%
+	    //get the prodNameCart
+		String[] prodNamCart = { "yo", "yo" };//currentUser.getProdNamCartArr().clone();
+		String[] prodPriCart = { "yo", "yo" };//currentUser.getprodPriCartArr().clone();
+	%>
+
+	Product List:
+	<%
+		int i = 0;
+		for (i = 0; i < prodNamCart.length; i++) {
+			out.print(" <tr><form><th><input value=\" "
+					+ prodNamCart[i]
+					+ " \" name=\"name"
+					+ i
+					+ "\" size=\"10\"/ readonly></th><th><input value=\""
+					+ prodPriCart[i]
+					+ "\" name=\"pri"
+					+ i
+					+ "\" size=\"10\"/ readonly></th><th>"
+					+ "</th></form></tr>");
+		}
+	%>
+
+	Total (price of items in cart):
+	<%
+		out.print(currentUser.getCartTotal());
+	%>
+	<form action=comfirmation.jsp>
+		Enter Cred Card Info: <input type="text" name="creditCard" /> <input
+			type="submit" value="Purchase"> <input type="hidden"
+			name="st" value="20">
+	</form>
 </body>
 </html>

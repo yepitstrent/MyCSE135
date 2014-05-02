@@ -191,15 +191,15 @@ public class LoginServlet extends HttpServlet {
 
 		case 6: {
 			System.out.println("Delete Category");
-			try {System.out.println("TOP OF DELETE");
+			try {
+				System.out.println("TOP OF DELETE");
 				if (user.isValid()) {
 					System.out.println("AM I VALID IN DELETE");
 					String index = request.getParameter("CatIndex");
-					String[] arr = user.getCatIDArrList();
-					System.out.println("%$%$%$%$%$%$%"+arr[Integer.parseInt(index)] + "(*(*(*");
+
 					user.setCatIndex(index);
-					
-					 user = UserDAO.deleteCatByID(user);
+
+					user = UserDAO.deleteCatByID(user);
 					session = request.getSession(true);
 					user = UserDAO.getAllCategories(user);
 					response.sendRedirect("categoryOwner.jsp");
@@ -223,12 +223,14 @@ public class LoginServlet extends HttpServlet {
 					System.out.println("AM I VALID");
 
 					user.setProdSearchStr(request.getParameter("prodname"));
-					user.setProdCatSearchStr(request.getParameter("catListForProdWithText"));
+					user.setProdCatSearchStr(request
+							.getParameter("catListForProdWithText"));
 					System.out.println("IN CASE7 "
 							+ request.getParameter("prodname"));
 					user = UserDAO.getProdFromString(user);
 					session = request.getSession(true);
 					user = UserDAO.getAllCategories(user);
+					System.out.println("B4 prod jsp");
 					response.sendRedirect("productsDisplay.jsp");
 					// logged-in page
 				} else {
@@ -269,12 +271,32 @@ public class LoginServlet extends HttpServlet {
 			break;
 		}
 		case 9: {
+
 			System.out.println("in servlet case 9");
-			response.sendRedirect("cart.jsp");
+			try {
+				if (user.isValid()) {
+					System.out.println("AM I VALID");
+					user = UserDAO.getCartTotal(user);
+					response.sendRedirect("cart.jsp");
+				}else {
+					System.out.println("LoginServlet: 9");
+					response.sendRedirect("invalidLogin.jsp");
+				}
+				// error page
+			} catch (Throwable theException) {
+				System.out.println(theException);
+			}
 			break;
 		}
 		case 10: {
 			System.out.println("IN UPDATE CAT");
+		}
+		case 11:
+		{
+			System.out.println("IN CASE 11: ADD PRODUCT TO CART");
+			String index = request.getParameter("prodIndex");
+			user.setProdIndex(index);
+			//look at delete cat
 		}
 		default: {
 			System.out.println("DEFAULT");

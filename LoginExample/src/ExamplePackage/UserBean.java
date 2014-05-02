@@ -38,8 +38,39 @@ public class UserBean {
 
 	public boolean valid;
 	private String prodCatSearchStr;
-	
+
+	private double cartTotal;
+
+	public void setCartTotal(double a) {
+		cartTotal = a;
+	}
+
+	public double getCartTotal() {
+		return cartTotal;
+	}
+
+	private String[] cartProd;
+	private String[] cartPric;
+	private String prodIndex;
+
+	public String[] getCartProd() {
+		return cartProd;
+	}
+
+	public void setCartProd(ArrayList<String> a) {
+		cartProd = a.toArray(new String[a.size()]);
+	}
+
+	public String[] getCartPric() {
+		return cartPric;
+	}
+
+	public void setCartPric(ArrayList<String> a) {
+		cartPric = a.toArray(new String[a.size()]);
+	}
+
 	public String[] getprodSkuArr() {
+		// System.out.println("IN GET SKU : " + prodSkuArr[0]);
 		return prodSkuArr;
 	}
 
@@ -51,19 +82,17 @@ public class UserBean {
 		return prodPriArr;
 	}
 
-	public void setprodSkuArr(ArrayList<String> a) {
-		prodSkuArr = a.toArray(new String[a.size()]);
+	public void setprodSkuArr(String[] a) {
+		prodSkuArr = a.clone();
 	}
 
-	public void setprodCatArr(ArrayList<String> a) {
-		prodCatArr = a.toArray(new String[a.size()]);
+	public void setprodCatArr(String[] a) {
+		prodCatArr = a.clone();
 	}
 
-	public void setprodPriArr(ArrayList<String> a) {
-		prodPriArr = a.toArray(new String[a.size()]);
+	public void setprodPriArr(String[] a) {
+		prodPriArr = a.clone();
 	}
-
-
 
 	public void setCatIndex(String index) {
 		catIndex = Integer.parseInt(index);
@@ -102,6 +131,7 @@ public class UserBean {
 	}
 
 	public void setProdNameArr(String[] arr) {
+		System.out.println("setting name");
 		prodNameArr = arr.clone();
 	}
 
@@ -271,11 +301,18 @@ public class UserBean {
 
 	public void setProdCatSearchStr(String str) {
 		prodCatSearchStr = str;
-		
 	}
-	public String getProdCatSearchStr()
-	{
+
+	public String getProdCatSearchStr() {
 		return prodCatSearchStr;
+	}
+
+	public void setProdIndex(String index) {
+		prodIndex = index;
+	}
+
+	public String getProdIndex() {
+		return prodIndex;
 	}
 
 }

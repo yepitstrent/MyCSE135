@@ -158,9 +158,12 @@ public class UserDAO {
 				bean.setProdDescArr(prodDescArrList
 						.toArray(new String[prodDescArrList.size()]));
 
-				bean.setprodSkuArr(prodSKUArrList);
-				bean.setprodCatArr(prodCatArrList);
-				bean.setprodPriArr(prodPriceArrList);
+				bean.setprodSkuArr(prodSKUArrList
+						.toArray(new String[prodSKUArrList.size()]));
+				bean.setprodCatArr(prodCatArrList
+						.toArray(new String[prodCatArrList.size()]));
+				bean.setprodPriArr(prodPriceArrList
+						.toArray(new String[prodPriceArrList.size()]));
 			} else {
 				System.out.println("Name is null");
 				prodNameArrList.add("No Results Found In This Search");
@@ -175,9 +178,12 @@ public class UserDAO {
 						.toArray(new String[prodIDArrList.size()]));
 				bean.setProdDescArr(prodDescArrList
 						.toArray(new String[prodDescArrList.size()]));
-				bean.setprodSkuArr(prodSKUArrList);
-				bean.setprodCatArr(prodCatArrList);
-				bean.setprodPriArr(prodPriceArrList);
+				bean.setprodSkuArr(prodSKUArrList
+						.toArray(new String[prodSKUArrList.size()]));
+				bean.setprodCatArr(prodCatArrList
+						.toArray(new String[prodCatArrList.size()]));
+				bean.setprodPriArr(prodPriceArrList
+						.toArray(new String[prodPriceArrList.size()]));
 
 			}
 		} catch (Exception ex) {
@@ -219,6 +225,9 @@ public class UserDAO {
 		ArrayList<String> prodIDArrList = new ArrayList<String>();
 		ArrayList<String> prodDescArrList = new ArrayList<String>();
 		ArrayList<String> prodNameArrList = new ArrayList<String>();
+		ArrayList<String> prodSKUArrList = new ArrayList<String>();
+		ArrayList<String> prodPriceArrList = new ArrayList<String>();
+		ArrayList<String> prodCatArrList = new ArrayList<String>();
 
 		// do sql
 		Statement stmt = null;
@@ -246,9 +255,6 @@ public class UserDAO {
 
 		try {
 
-			if (str == null || str.equals("")) {
-				throw new IllegalArgumentException("");
-			}
 			// connect to DB
 			currentCon = ConnectionManager.getConnection();
 			stmt = currentCon.createStatement();
@@ -273,6 +279,12 @@ public class UserDAO {
 
 					prodIDArrList.add(rs.getString("PROD_ID"));
 
+					prodCatArrList.add(rs.getString("PROD_CAT_ID"));
+
+					prodPriceArrList.add(rs.getString("PROD_PRICE"));
+
+					prodSKUArrList.add(rs.getString("PROD_SKU"));
+
 					bean.setValid(true);
 				}
 			}
@@ -284,30 +296,54 @@ public class UserDAO {
 						.toArray(new String[prodIDArrList.size()]));
 				bean.setProdDescArr(prodDescArrList
 						.toArray(new String[prodDescArrList.size()]));
+				bean.setprodSkuArr(prodSKUArrList
+						.toArray(new String[prodSKUArrList.size()]));
+				bean.setprodCatArr(prodCatArrList
+						.toArray(new String[prodCatArrList.size()]));
+				bean.setprodPriArr(prodPriceArrList
+						.toArray(new String[prodPriceArrList.size()]));
+
 			} else {
-				System.out.println("Name is null");
-				prodNameArrList.add("No Results Found In This Search");
-				prodNameArrList.add("No Results Found In This Search");
-				prodNameArrList.add("No Results Found In This Search");
+				System.out.println("Name is null in else str");
+
+				prodNameArrList.add(" ");
+				prodCatArrList.add(" ");
+				prodPriceArrList.add(" ");
+				prodSKUArrList.add(" ");
 				bean.setProdNameArr(prodNameArrList
 						.toArray(new String[prodNameArrList.size()]));
 				bean.setProdIDArr(prodIDArrList
 						.toArray(new String[prodIDArrList.size()]));
 				bean.setProdDescArr(prodDescArrList
 						.toArray(new String[prodDescArrList.size()]));
-
+				bean.setprodSkuArr(prodSKUArrList
+						.toArray(new String[prodSKUArrList.size()]));
+				bean.setprodCatArr(prodCatArrList
+						.toArray(new String[prodCatArrList.size()]));
+				bean.setprodPriArr(prodPriceArrList
+						.toArray(new String[prodPriceArrList.size()]));
+				System.out.println("Done setting prod arr");
 			}
 		} catch (Exception ex) {
-			System.out.println("Name is null");
-			prodNameArrList.add("No Results Found In This Search");
-			prodNameArrList.add("No Results Found In This Search");
-			prodNameArrList.add("No Results Found In This Search");
+			System.out.println("Name is null in catch");
+			prodNameArrList.add(" ");
+			prodNameArrList.add(" ");
+			prodNameArrList.add(" ");
+			prodCatArrList.add(" ");
+			prodPriceArrList.add(" ");
+			prodSKUArrList.add(" ");
 			bean.setProdNameArr(prodNameArrList
 					.toArray(new String[prodNameArrList.size()]));
 			bean.setProdIDArr(prodIDArrList.toArray(new String[prodIDArrList
 					.size()]));
 			bean.setProdDescArr(prodDescArrList
 					.toArray(new String[prodDescArrList.size()]));
+			bean.setprodSkuArr(prodSKUArrList.toArray(new String[prodSKUArrList
+					.size()]));
+			bean.setprodCatArr(prodCatArrList.toArray(new String[prodCatArrList
+					.size()]));
+			bean.setprodPriArr(prodPriceArrList
+					.toArray(new String[prodPriceArrList.size()]));
 			System.out.println("Prod Search BY SRT");
 			System.out.println("Log In failed: An Exception has occurred! "
 					+ ex);
@@ -821,6 +857,108 @@ public class UserDAO {
 				System.out.println("valid: True");
 				bean.setValid(true);
 			}
+		} catch (Exception ex) {
+			System.out.println("Log In failed: An Exception has occurred! "
+					+ ex);
+		} // some exception handling
+		finally {
+			if (rs != null) {
+				try {
+					rs.close();
+				} catch (Exception e) {
+				}
+				rs = null;
+			}
+			if (stmt != null) {
+				try {
+					stmt.close();
+				} catch (Exception e) {
+				}
+				stmt = null;
+			}
+			if (currentCon != null) {
+				try {
+					currentCon.close();
+				} catch (Exception e) {
+				}
+				currentCon = null;
+			}
+		}
+		return bean;
+	}
+
+	public static UserBean getCartTotal(UserBean bean) {
+		Statement stmt = null;
+		String searchQuery = "select sum(cart_prod_price) from cart";
+
+		String searchQ = "";
+
+		try { // connect to DB
+			currentCon = ConnectionManager.getConnection();
+			stmt = currentCon.createStatement();
+			rs = stmt.executeQuery(searchQuery);
+			boolean more = rs.next();
+			if (!more) {
+				System.out
+						.println("Sorry, you are not a registered user! Please sign up first");
+				bean.setValid(false);
+			} // if user exists set the isValid variable to true
+			else if (more) {
+				bean.setCartTotal(Integer.parseInt(rs.getString("SUM")));
+				bean.setValid(true);
+			}
+		} catch (Exception ex) {
+			System.out.println("Log In failed: An Exception has occurred! "
+					+ ex);
+		} // some exception handling
+		finally {
+			if (rs != null) {
+				try {
+					rs.close();
+				} catch (Exception e) {
+				}
+				rs = null;
+			}
+			if (stmt != null) {
+				try {
+					stmt.close();
+				} catch (Exception e) {
+				}
+				stmt = null;
+			}
+			if (currentCon != null) {
+				try {
+					currentCon.close();
+				} catch (Exception e) {
+				}
+				currentCon = null;
+			}
+		}
+		return bean;
+	}
+
+	public static UserBean addProductToCart(UserBean bean) {
+		System.out.println("In DAO add to cart");
+
+		Statement stmt = null;
+		String index = bean.getProdIndex();
+		//String[]
+
+		String searchQuery = "INSERT INTO CART "
+				+ "( CART_ID, CART_PROD_ID, CART_PROD, CART_PROD_PRICE ) "
+				+ "VALUES()";
+
+		System.out.println("Query: " + searchQuery);
+
+		try { // connect to DB
+			currentCon = ConnectionManager.getConnection();
+			stmt = currentCon.createStatement();
+			stmt.executeUpdate(searchQuery);
+			// boolean more = rs.next(); // if user does not exist set the
+			// isValid variable to false
+
+			bean.setValid(true);
+
 		} catch (Exception ex) {
 			System.out.println("Log In failed: An Exception has occurred! "
 					+ ex);

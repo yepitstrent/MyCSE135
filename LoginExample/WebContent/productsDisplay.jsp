@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=windows-1256"
 	pageEncoding="windows-1256" import="ExamplePackage.UserBean"%>
+<%@ page import="java.util.ArrayList"%>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 
@@ -80,8 +81,9 @@
 		</form>
 
 		<form action=LoginServlet>
-			Search By Product And Category:<Select name="catListForProdWithText" size="1">
-			<option value="All">All</option>
+			Search By Product And Category:<Select name="catListForProdWithText"
+				size="1">
+				<option value="All">All</option>
 				<%
 					for (i = 0; i < strName.length; i++) {
 						out.print("<option value=\"" + strID[i] + "\">" + strName[i]
@@ -93,6 +95,7 @@
 		</form>
 
 		<%
+			System.out.println("FAULT HERER");
 			String[] prodName = currentUser.getProdNameArr().clone();
 			String[] prodSku = currentUser.getprodSkuArr().clone();
 			String[] prodCat = currentUser.getprodCatArr().clone();
@@ -102,7 +105,10 @@
 		Product List:
 		<%
 			for (i = 0; i < prodName.length; i++) {
-				out.print(" <tr><form><th><input value=\" "
+				if (prodName[i].equals(" ")) {
+					break;
+				}
+				out.print(" <tr><form action=LoginServlet><th><input value=\" "
 						+ prodName[i]
 						+ " \" name=\"name"
 						+ i
@@ -119,7 +125,10 @@
 						+ "\" name=\"pri"
 						+ i
 						+ "\" size=\"30\"/ readonly></th><th><input type=\"submit\" name=\"addToCart"
-						+ i + "\" value=\"Add to Cart\" />"
+						+ i + "\" value=\"Add to Cart\" /> "
+						+ "<input type=\"hidden\" name=\"prodIndex\" value=\""
+						+ i + "\" >"
+						+ "<input type=\"hidden\" name=\"st\" value=\"11\">"
 						+ "</th></form></tr>");
 			}
 		%>
@@ -128,6 +137,9 @@
 			String[] emptyName = { " " };
 			String[] emptyDesc = { " " };
 			String[] emptyID = { " " };
+			String[] emptySKU = { " " };
+			String[] emptyPrice = { " " };
+			String[] emptyCat = { " " };
 		%>
 		<%
 			currentUser.setProdNameArr(emptyName);
@@ -137,6 +149,15 @@
 		%>
 		<%
 			currentUser.setProdIDArr(emptyID);
+		%>
+		<%
+			currentUser.setprodSkuArr(emptySKU);
+		%>
+		<%
+			currentUser.setprodPriArr(emptyPrice);
+		%>
+		<%
+			currentUser.setprodCatArr(emptyCat);
 		%>
 	</center>
 </body>
