@@ -213,6 +213,7 @@ public class LoginServlet extends HttpServlet {
                 //user = UserDAO.getAllCategories(user);
                 user = UserDAO.categoryOwner(user); 
                 session = request.getSession(true);  
+                user = UserDAO.getAllCategories(user);
                 response.sendRedirect("userLogged.jsp"); 
                 //logged-in page 
               } 
@@ -241,6 +242,7 @@ public class LoginServlet extends HttpServlet {
               user.setCatName(request.getParameter("catList")); 
                 user = UserDAO.categoryOwner(user); 
                 session = request.getSession(true);  
+                user = UserDAO.getAllCategories(user);
                 response.sendRedirect("userLogged.jsp"); 
                 //logged-in page 
               } 
@@ -271,7 +273,8 @@ public class LoginServlet extends HttpServlet {
                 user.setProdSearchStr(request.getParameter("prodname"));
                 System.out.println("IN CASE7 "+ request.getParameter("prodname"));
                 user = UserDAO.getProdFromString(user); 
-                session = request.getSession(true);  
+                session = request.getSession(true);
+                user = UserDAO.getAllCategories(user);
                 response.sendRedirect("productsDisplay.jsp"); 
                 //logged-in page 
               } 
@@ -302,7 +305,8 @@ public class LoginServlet extends HttpServlet {
                 user.setProdSearchCat(request.getParameter("catListForProd"));
                 System.out.println("IN CASE8 "+ request.getParameter("catListForProd"));
                 user = UserDAO.getProdFromCat(user); 
-                session = request.getSession(true);  
+                session = request.getSession(true); 
+                user = UserDAO.getAllCategories(user);
                 response.sendRedirect("productsDisplay.jsp"); 
                 //logged-in page 
               } 

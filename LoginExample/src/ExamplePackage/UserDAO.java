@@ -119,19 +119,26 @@ public class UserDAO
 	  System.out.println("IN DAO GET PROD FM STRING");
 	  //get string from bean
 	  String str = bean.getProdSearchStr();
+	  
 	  ArrayList<String> prodIDArrList = new ArrayList<String>();
 	  ArrayList<String> prodDescArrList = new ArrayList<String>();
 	  ArrayList<String> prodNameArrList = new ArrayList<String>();
 	  
 	  //do sql
 	  Statement stmt = null;
-	  String searchQuery = "SELECT * from PRODUCTS WHERE PROD_NAME LIKE '%" 
-	                        + str + "%' OR PROD_DESCR LIKE '%" 
-			                + str + "%'"; 
+	  String searchQuery = "SELECT * from PRODUCTS WHERE LOWER(PROD_NAME) LIKE LOWER('%" 
+	                        + str + "%') OR LOWER(PROD_DESCR) LIKE LOWER('%" 
+			                + str + "%')"; 
 	  System.out.println("Query: "+searchQuery); 
 	  
 	  try 
-	    { //connect to DB 
+	    { 
+		  
+		  if(str == null || str.equals("") )
+		  {
+			  throw new IllegalArgumentException("");
+		  }
+		  //connect to DB 
 	      currentCon = ConnectionManager.getConnection(); 
 	      stmt=currentCon.createStatement(); 
 	      rs = stmt.executeQuery(searchQuery);
@@ -180,6 +187,13 @@ public class UserDAO
 	    }
 	    catch (Exception ex) 
 	    { 
+	    	  System.out.println("Name is null");
+	    	  prodNameArrList.add("No Results Found In This Search");
+	    	  prodNameArrList.add("No Results Found In This Search");
+	    	  prodNameArrList.add("No Results Found In This Search");
+	    	  bean.setProdNameArr(prodNameArrList.toArray(new String[prodNameArrList.size()]));
+	          bean.setProdIDArr(prodIDArrList.toArray(new String[prodIDArrList.size()]));
+	          bean.setProdDescArr(prodDescArrList.toArray(new String[prodDescArrList.size()]));
 	    	System.out.println("Prod Search BY SRT");
 	      System.out.println("Log In failed: An Exception has occurred! " + ex);
 	    } //some exception handling 

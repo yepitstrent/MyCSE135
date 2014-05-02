@@ -54,7 +54,7 @@
     <input type="text" name="prodname"/>
   <input type="submit" value="Submit">
   <input type="hidden" name="st" value="7" >
-  </form>
+  </form>Product List:
   
 </center> 
 </body>
