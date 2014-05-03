@@ -11,9 +11,7 @@
 <title>Add Product Page</title>
 </head>
 <body>
-	<%
-		System.out.println("TOP OF PROD OWNER");
-	%>
+	
 	<%
 		UserBean currentUser = (UserBean) (session
 				.getAttribute("currentSessionUser"));
@@ -28,7 +26,9 @@
 		<input type="submit" value="Go Back">
 	</form>
 
-	<h1>Add a product to the page</h1>
+	<h1>The "Products" Page</h1>
+
+	<h3>Add a product to the page</h3>
 
 	<form action=LoginServlet>
 		<%
@@ -52,6 +52,8 @@
 			value="Submit"> <input type="hidden" name="st" value="3">
 	</form>
 
+	<h3>Current Products</h3>
+
 	<form action=LoginServlet>
 		<%
 			String[] prodName = currentUser.getProdNameArrList().clone();
@@ -64,7 +66,6 @@
 
 
 		<%
-			;
 			for (i = 0; i < prodName.length; i++) {
 				out.print(" <tr><form><th><input value=\" "
 						+ prodName[i]
@@ -75,10 +76,10 @@
 						+ "\" name=\"newProdSKU"
 						+ i
 						+ "\" size=\"10\"/></th><th><input value=\""
-								+ prodPrice[i]
-										+ "\" name=\"newProdPrice"
-										+ i
-										+ "\" size=\"10\"/></th><th>"
+						+ prodPrice[i]
+						+ "\" name=\"newProdPrice"
+						+ i
+						+ "\" size=\"10\"/></th><th>"
 						+ "<form action=LoginServlet><input type=\"submit\" name=\"updateProd"
 						+ i
 						+ "\" value=\"Update\" />"

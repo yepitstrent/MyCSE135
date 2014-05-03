@@ -28,12 +28,13 @@
 			type="hidden" name="st" value="9">
 	</form>
 	<center>
+		<h1>Owners Pages</h1>
 		<form action="LoginServlet">
 			<%
 				String strCat = currentUser.getRole();
-				System.out.println(currentUser.getRole());
-				if (strCat.equals("owner")) {
-			%>Add/Delete a Category:<input type="submit" value="Category"><br>
+				//System.out.println(currentUser.getRole());
+				if (strCat.equalsIgnoreCase("owner")) {
+			%>The "Categories" Page:<input type="submit" value="Category"><br>
 			<%
 				} else {
 			%>
@@ -46,9 +47,9 @@
 		<form action="LoginServlet">
 			<%
 				String strProd = currentUser.getRole();
-				System.out.println(currentUser.getRole());
-				if (strProd.equals("owner")) {
-			%>Add/Delete a Product:<input type="submit" value="Product"><br>
+				//System.out.println(currentUser.getRole());
+				if (strProd.equalsIgnoreCase("owner")) {
+			%>The "Products" Page:<input type="submit" value="Product"><br>
 			<%
 				} else {
 			%>

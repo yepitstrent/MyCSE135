@@ -14,6 +14,7 @@
 	<form action="LoginPage.jsp">
 		<center>
 			Sorry, the user name you have chosen is registered to another user!
+			<p>Either that, or you did something wrong!</p>
 			Please sign up first<br>
 			<p>Go back to try again or signup for a new account</p>
 		</center>

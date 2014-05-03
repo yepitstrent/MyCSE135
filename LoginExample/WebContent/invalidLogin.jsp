@@ -14,6 +14,7 @@
 	<form action="LoginPage.jsp">
 		<center>
 			Sorry, you are not a registered user! Please sign up first<br>
+			<p>Either that, or you did something wrong!</p>
 			<p>Go back to try again or signup for a new account</p>
 		</center>
 		<br> <input type="submit" value="Back">

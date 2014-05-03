@@ -3,51 +3,22 @@ package ExamplePackage;
 import java.text.*;
 import java.util.*;
 import java.sql.*;
+import javax.servlet.*;
 
 public class UserDAO {
 	static Connection currentCon = null;
 	static ResultSet rs = null;
 
 	public static UserBean deleteCatByID(UserBean bean) {
-		// get the index
-		// get the id arr
-		// setup sql conn
 
-		/*
-		 * DELETE FROM CATEGORIES WHERE CAT_ID = 1 AND 1 NOT IN (SELECT
-		 * PROD_CAT_ID FROM PRODUCTS)
-		 */
 		Statement stmt = null;
 
 		int index = bean.getCatIndex();
 		String[] arr = bean.getCatIDArrList();
 		String id = arr[index];
 
-		/*
-		 * INSERT INTO THE_USER (USER_NAME, USER_ROLE, USER_AGE, USER_STATE)
-		 * SELECT * FROM (SELECT 'Trent', 'Owner', 37, 'CA') AS tmp WHERE NOT
-		 * EXISTS ( SELECT USER_NAME FROM THE_USER WHERE USER_NAME = 'Trent' )
-		 * LIMIT 1;
-		 */
-		// INSERT INTO THE_USER (USER_NAME, USER_ROLE, USER_AGE, USER_STATE)
-		// VALUES ( 'Trent', 'Owner', 37, 'CA' );
-
 		String searchQuery = "DELETE FROM CATEGORIES WHERE CAT_ID = " + id
 				+ " AND " + id + " NOT IN (SELECT PROD_CAT_ID FROM PRODUCTS)";
-
-		/*
-		 * String searchQuery =
-		 * "INSERT INTO THE_USER (USER_NAME, USER_ROLE, USER_AGE, USER_STATE) VALUES ( '"
-		 * + username + "' ,'" + role + "', '" + age + "', '" + state + "' )";
-		 */
-
-		// "System.out.println" prints in the console; Normally used to trace
-		// the process
-		// System.out.println("Signup UserDAO");
-		// System.out.println("Your user name is: " + username);
-		// System.out.println("Your age is: " + age);
-		// System.out.println("Your role is: " + role);
-		// System.out.println("Your state is: " + state);
 
 		System.out.println("Query: " + searchQuery);
 
@@ -57,18 +28,6 @@ public class UserDAO {
 			stmt.executeUpdate(searchQuery);
 			bean.setValid(true);
 
-			// boolean more = rs.next(); // if user does not exist set the
-			// isValid variable to false
-			// System.out.println(rs);
-			/*
-			 * if (!more) { System.out.println(
-			 * "Sorry, you are not a registered user! Please sign up first");
-			 * bean.setValid(false); }
-			 */// if user exists set the isValid variable to true
-			/*
-			 * else if (more) { System.out.println("Successful Signup Insert.");
-			 * bean.setValid(true); }
-			 */
 		} catch (Exception ex) {
 			System.out.println("Signup failed: An Exception has occurred! "
 					+ ex);
@@ -100,7 +59,7 @@ public class UserDAO {
 	}
 
 	public static UserBean getProdFromCat(UserBean bean) {
-		System.out.println("IN DAO GET PROD FM STRING");
+
 		// get string from bean
 		String str = bean.getProdSearchCat();
 		ArrayList<String> prodIDArrList = new ArrayList<String>();
@@ -113,8 +72,6 @@ public class UserDAO {
 		Statement stmt = null;
 		String searchQuery = "SELECT * from PRODUCTS, CATEGORIES WHERE PROD_CAT_ID = CAT_ID"
 				+ " AND CAT_ID = " + str;
-
-		System.out.println("Query: " + searchQuery);
 
 		try { // connect to DB
 			currentCon = ConnectionManager.getConnection();
@@ -133,7 +90,6 @@ public class UserDAO {
 				else if (more) {
 					flag = true;
 
-					System.out.println("parse prod arr");
 					prodNameArrList.add(rs.getString("PROD_NAME"));
 
 					prodDescArrList.add(rs.getString("PROD_DESCR"));
@@ -150,7 +106,7 @@ public class UserDAO {
 				}
 			}
 			if (flag) {
-				System.out.println("Cat Search Setting prod arr list to bean");
+				// System.out.println("Cat Search Setting prod arr list to bean");
 				bean.setProdNameArr(prodNameArrList
 						.toArray(new String[prodNameArrList.size()]));
 				bean.setProdIDArr(prodIDArrList
@@ -165,7 +121,7 @@ public class UserDAO {
 				bean.setprodPriArr(prodPriceArrList
 						.toArray(new String[prodPriceArrList.size()]));
 			} else {
-				System.out.println("Name is null");
+				// System.out.println("Name is null");
 				prodNameArrList.add("No Results Found In This Search");
 				prodNameArrList.add("No Results Found In This Search");
 				prodNameArrList.add("No Results Found In This Search");
@@ -187,7 +143,7 @@ public class UserDAO {
 
 			}
 		} catch (Exception ex) {
-			System.out.println("Prod Search BY SRT");
+			// System.out.println("Prod Search BY SRT");
 			System.out.println("Log In failed: An Exception has occurred! "
 					+ ex);
 		} // some exception handling
@@ -218,7 +174,7 @@ public class UserDAO {
 	}
 
 	public static UserBean getProdFromString(UserBean bean) {
-		System.out.println("IN DAO GET PROD FM STRING");
+		// System.out.println("IN DAO GET PROD FM STRING");
 		// get string from bean
 		String str = bean.getProdSearchStr();
 
@@ -240,17 +196,12 @@ public class UserDAO {
 					+ str
 					+ "%')";
 		} else {
-			searchQuery = "SELECT * from PRODUCTS, CATEGORIES WHERE (LOWER(PROD_NAME)"
-					+ " LIKE LOWER('%"
-					+ str
-					+ "%') OR LOWER(PROD_DESCR) LIKE LOWER('%"
-					+ str
-					+ "%') ) AND PROD_ID = " + bean.getProdCatSearchStr();
+			searchQuery = "SELECT * from PRODUCTS WHERE (LOWER(PROD_NAME)"
+					+ " LIKE LOWER('%" + str
+					+ "%') OR LOWER(PROD_DESCR) LIKE LOWER('%" + str
+					+ "%') ) AND prod_cat_id = " + bean.getProdCatSearchStr();
 		}
 
-		if (str == null || str.equals("")) {
-			searchQuery = "SELECT * FROM PRODUCTS";
-		}
 		System.out.println("Query: " + searchQuery);
 
 		try {
@@ -265,6 +216,7 @@ public class UserDAO {
 
 			while (more = rs.next()) {
 				if (!more) {
+
 					System.out
 							.println("IN HERER Sorry, you are not a registered user! Please sign up first");
 					bean.setValid(false);
@@ -289,7 +241,8 @@ public class UserDAO {
 				}
 			}
 			if (flag) {
-				System.out.println("Setting prod arr list to bean");
+				// System.out.println("Setting prod arr list to bean");
+				// out.write("");
 				bean.setProdNameArr(prodNameArrList
 						.toArray(new String[prodNameArrList.size()]));
 				bean.setProdIDArr(prodIDArrList
@@ -304,7 +257,7 @@ public class UserDAO {
 						.toArray(new String[prodPriceArrList.size()]));
 
 			} else {
-				System.out.println("Name is null in else str");
+				// System.out.println("Name is null in else str");
 
 				prodNameArrList.add(" ");
 				prodCatArrList.add(" ");
@@ -322,10 +275,10 @@ public class UserDAO {
 						.toArray(new String[prodCatArrList.size()]));
 				bean.setprodPriArr(prodPriceArrList
 						.toArray(new String[prodPriceArrList.size()]));
-				System.out.println("Done setting prod arr");
+				// System.out.println("Done setting prod arr");
 			}
 		} catch (Exception ex) {
-			System.out.println("Name is null in catch");
+			// System.out.println("Name is null in catch");
 			prodNameArrList.add(" ");
 			prodNameArrList.add(" ");
 			prodNameArrList.add(" ");
@@ -344,7 +297,7 @@ public class UserDAO {
 					.size()]));
 			bean.setprodPriArr(prodPriceArrList
 					.toArray(new String[prodPriceArrList.size()]));
-			System.out.println("Prod Search BY SRT");
+			// System.out.println("Prod Search BY SRT");
 			System.out.println("Log In failed: An Exception has occurred! "
 					+ ex);
 		} // some exception handling
@@ -383,7 +336,7 @@ public class UserDAO {
 		// INSERT INTO THE_USER
 		String searchQuery = "SELECT * from THE_USER WHERE USER_NAME = "
 				+ bean.getUsername();
-		System.out.println("Query: " + searchQuery);
+		// System.out.println("Query: " + searchQuery);
 
 		try { // connect to DB
 			currentCon = ConnectionManager.getConnection();
@@ -453,15 +406,6 @@ public class UserDAO {
 		String state = bean.getState();
 		int age = bean.getAge();
 
-		/*
-		 * INSERT INTO THE_USER (USER_NAME, USER_ROLE, USER_AGE, USER_STATE)
-		 * SELECT * FROM (SELECT 'Trent', 'Owner', 37, 'CA') AS tmp WHERE NOT
-		 * EXISTS ( SELECT USER_NAME FROM THE_USER WHERE USER_NAME = 'Trent' )
-		 * LIMIT 1;
-		 */
-		// INSERT INTO THE_USER (USER_NAME, USER_ROLE, USER_AGE, USER_STATE)
-		// VALUES ( 'Trent', 'Owner', 37, 'CA' );
-
 		String searchQuery = "INSERT INTO THE_USER (USER_NAME, USER_ROLE, USER_AGE, USER_STATE)"
 				+ "SELECT * FROM (SELECT '"
 				+ username
@@ -483,13 +427,13 @@ public class UserDAO {
 
 		// "System.out.println" prints in the console; Normally used to trace
 		// the process
-		System.out.println("Signup UserDAO");
-		System.out.println("Your user name is: " + username);
-		System.out.println("Your age is: " + age);
-		System.out.println("Your role is: " + role);
-		System.out.println("Your state is: " + state);
+		// System.out.println("Signup UserDAO");
+		// System.out.println("Your user name is: " + username);
+		// System.out.println("Your age is: " + age);
+		// System.out.println("Your role is: " + role);
+		// System.out.println("Your state is: " + state);
 
-		System.out.println("Query: " + searchQuery);
+		// System.out.println("Query: " + searchQuery);
 
 		try { // connect to DB
 			currentCon = ConnectionManager.getConnection();
@@ -497,18 +441,6 @@ public class UserDAO {
 			stmt.executeUpdate(searchQuery);
 			bean.setValid(true);
 
-			// boolean more = rs.next(); // if user does not exist set the
-			// isValid variable to false
-			// System.out.println(rs);
-			/*
-			 * if (!more) { System.out.println(
-			 * "Sorry, you are not a registered user! Please sign up first");
-			 * bean.setValid(false); }
-			 */// if user exists set the isValid variable to true
-			/*
-			 * else if (more) { System.out.println("Successful Signup Insert.");
-			 * bean.setValid(true); }
-			 */
 		} catch (Exception ex) {
 			System.out.println("Signup failed: An Exception has occurred! "
 					+ ex);
@@ -551,7 +483,7 @@ public class UserDAO {
 		ArrayList<String> prodIDArrList = new ArrayList<String>();
 
 		String searchQuery = "SELECT * from PRODUCTS ORDER BY PROD_ID ASC";
-		System.out.println("Query: " + searchQuery);
+		// System.out.println("Query: " + searchQuery);
 
 		try { // connect to DB
 			currentCon = ConnectionManager.getConnection();
@@ -578,7 +510,7 @@ public class UserDAO {
 				}
 			}
 			if (flag) {
-				System.out.println("Setting cat arr list to bean");
+				// System.out.println("Setting cat arr list to bean");
 				bean.setProdSKUArrList(prodSKUArrList
 						.toArray(new String[prodSKUArrList.size()]));
 				bean.setProdNameArrList(prodNameArrList
@@ -596,7 +528,7 @@ public class UserDAO {
 						.toArray(new String[prodNameArrList.size()]));
 				bean.setProdIDArrList(prodIDArrList
 						.toArray(new String[prodIDArrList.size()]));
-				bean.setProdDescArray(prodPriceArrList
+				bean.setProdPriceArray(prodPriceArrList
 						.toArray(new String[prodPriceArrList.size()]));
 				bean.setProdSKUArrList(prodSKUArrList
 						.toArray(new String[prodSKUArrList.size()]));
@@ -643,7 +575,7 @@ public class UserDAO {
 		ArrayList<String> catIDArrList = new ArrayList<String>();
 
 		String searchQuery = "SELECT * from CATEGORIES ORDER BY CAT_ID ASC";
-		System.out.println("Query: " + searchQuery);
+		// System.out.println("Query: " + searchQuery);
 
 		try { // connect to DB
 			currentCon = ConnectionManager.getConnection();
@@ -669,7 +601,7 @@ public class UserDAO {
 				}
 			}
 			if (flag) {
-				System.out.println("Setting cat arr list to bean");
+				// System.out.println("Setting cat arr list to bean");
 				bean.setCatNameArrList(catNameArrList);
 				bean.setCatIDArrList(catIDArrList);
 				bean.setCatDescArray(catDescArrList);
@@ -713,26 +645,19 @@ public class UserDAO {
 	}
 
 	public static UserBean categoryOwner(UserBean bean) {
-		System.out.println("In DAO catOwner");
+		// System.out.println("In DAO catOwner");
 
 		Statement stmt = null;
 		String cat = bean.getCatName();
 		String desc = bean.getCatDesc();
-		/*
-		 * INSERT INTO CATEGORIES ( CAT_NAME, CAT_DESCR ) SELECT * FROM (SELECT
-		 * 'Food', 'Different Cooking Supplies' ) AS tmp WHERE NOT EXISTS (
-		 * SELECT CAT_NAME FROM CATEGORIES WHERE CAT_NAME = 'Food' ) LIMIT 1;
-		 */
+
 		String searchQuery = "INSERT INTO CATEGORIES ( CAT_NAME, CAT_DESCR )"
 				+ " SELECT * FROM (SELECT  '" + cat + "', '" + desc
 				+ "' ) AS tmp " + " WHERE NOT EXISTS ( "
 				+ " SELECT CAT_NAME FROM CATEGORIES WHERE CAT_NAME = '" + cat
 				+ "' ) LIMIT 1";
 
-		// String searchQuery2 = "SELECT * FROM CATEGORIES";
-		// "System.out.println" prints in the console; Normally used to trace
-		// the process
-		System.out.println("Query: " + searchQuery);
+		// System.out.println("Query: " + searchQuery);
 
 		try { // connect to DB
 			currentCon = ConnectionManager.getConnection();
@@ -774,7 +699,7 @@ public class UserDAO {
 	}
 
 	public static UserBean catRemove(UserBean bean) {
-		System.out.println("In DAO catRemove");
+		// System.out.println("In DAO catRemove");
 
 		Statement stmt = null;
 		String cat = bean.getCatName();
@@ -786,7 +711,7 @@ public class UserDAO {
 				+ " SELECT CAT_NAME FROM CATEGORIES WHERE CAT_NAME = '" + cat
 				+ "' ) LIMIT 1";
 
-		System.out.println("Query: " + searchQuery);
+		// System.out.println("Query: " + searchQuery);
 
 		try { // connect to DB
 			currentCon = ConnectionManager.getConnection();
@@ -828,7 +753,7 @@ public class UserDAO {
 	}
 
 	public static UserBean productOwner(UserBean bean) {
-		System.out.println("In DAO prodOwner");
+		// System.out.println("In DAO prodOwner");
 
 		Statement stmt = null;
 		String product = bean.getProdName();
@@ -837,8 +762,7 @@ public class UserDAO {
 		String desc = bean.getProdDesc();
 		int catID = Integer.parseInt(bean.getCatID());
 		int ownerID = bean.getUserID();
-		System.out.println(product + "', '" + sku + "', " + price + ", '"
-				+ desc + "', " + catID + ", " + ownerID);
+
 		/*
 		 * INSERT INTO PRODUCTS ( PROD_NAME, PROD_SKU, PROD_PRICE, PROD_DESCR,
 		 * PROD_CAT_ID, PROD_OWNER_ID ) SELECT * FROM (SELECT 'Blender',
@@ -866,7 +790,7 @@ public class UserDAO {
 
 		// "System.out.println" prints in the console; Normally used to trace
 		// the process
-		System.out.println("Query: " + searchQuery);
+		// System.out.println("Query: " + searchQuery);
 
 		try { // connect to DB
 			currentCon = ConnectionManager.getConnection();
@@ -920,9 +844,9 @@ public class UserDAO {
 				+ username + "'";
 		// "System.out.println" prints in the console; Normally used to trace
 		// the process
-		System.out.println("Your user name is JAVA " + username);
+		// System.out.println("Your user name is JAVA " + username);
 		// System.out.println("Your password is JAVA " + password);
-		System.out.println("Query: " + searchQuery);
+		// System.out.println("Query: " + searchQuery);
 		bean = getAllCategories(bean);
 
 		try { // connect to DB
@@ -941,13 +865,11 @@ public class UserDAO {
 				String userName = rs.getString("USER_NAME");
 				String role = rs.getString("USER_ROLE");
 				String userID = rs.getString("USER_ID");
-				System.out.println("Welcome " + userName + " "
-						+ rs.getString("USER_ROLE") + " "
-						+ rs.getString("USER_ID"));
+
 				bean.setUserName(username);
 				bean.setUserID(Integer.parseInt(userID));
 				bean.setRole(role);
-				System.out.println("valid: True");
+
 				bean.setValid(true);
 			}
 		} catch (Exception ex) {
@@ -981,12 +903,11 @@ public class UserDAO {
 	}
 
 	public static UserBean getCartTotal(UserBean bean) {
-		System.out.println("CART TOT " + bean.getUserID() + "&^%&^&^&*&*&");
+
 		Statement stmt = null;
 		String sumQuery = "select sum(cart_prod_price) from cart WHERE cart_id = "
 				+ bean.getUserID() + ";";
 
-		System.out.println("SECOND");
 		String namQuery = "select prod_name, cart_prod_price from products, cart "
 				+ "WHERE(prod_id = cart_prod_id AND cart_id = "
 				+ bean.getUserID() + " );";
@@ -1009,14 +930,14 @@ public class UserDAO {
 				} // if user exists set the isValid variable to true
 				else if (more) {
 					flag = true;
-					System.out.println("adding shit&&&&&&&&&&&&&&&&&&&&&&&");
+
 					name.add(rs.getString("PROD_NAME"));
 					pric.add(rs.getString("CART_PROD_PRICE"));
 					bean.setValid(true);
 				}
 			}
 			if (flag) {
-				System.out.println("Setting cat arr list to bean");
+				// System.out.println("Setting cat arr list to bean");
 				bean.setCartPric(name);
 				bean.setCartProd(pric);
 			} else {
@@ -1025,7 +946,9 @@ public class UserDAO {
 				bean.setCartPric(name);
 				bean.setCartProd(pric);
 			}
-
+            //bean = UserDAO.getAllProducts(bean);
+            //bean = UserDAO.getAllCategories(bean);
+            
 			rs = stmt.executeQuery(sumQuery);
 			more = rs.next();
 
@@ -1036,7 +959,8 @@ public class UserDAO {
 			} // if user exists set the isValid variable to true
 			else if (more) {
 
-				bean.setCartTotal(Integer.parseInt(rs.getString("SUM")));
+				bean.setCartTotal(Double.parseDouble(rs.getString("SUM")));
+				bean = UserDAO.getAllProducts(bean);
 				bean.setValid(true);
 			}
 
@@ -1071,13 +995,13 @@ public class UserDAO {
 	}
 
 	public static UserBean addProductToCart(UserBean bean) {
-		System.out.println("In DAO add to cart");
+		// System.out.println("In DAO add to cart");
 
 		Statement stmt = null;
 		String index = bean.getProdIndex();
 		String[] idArr = bean.getProdIDArrList();
 		String[] priceArr = bean.getProdPriceArrList();
-		System.out.println("Did I make it this far?" + index);
+		// System.out.println("Did I make it this far?" + index);
 		String prodId = idArr[Integer.parseInt(index)];
 
 		/*
@@ -1099,7 +1023,7 @@ public class UserDAO {
 				+ "WHERE NOT EXISTS (SELECT CART_PROD_ID FROM CART WHERE CART_PROD_ID = "
 				+ prodId + " ) LIMIT 1";
 
-		System.out.println("Query: " + searchQuery);
+		// System.out.println("Query: " + searchQuery);
 
 		try { // connect to DB
 			currentCon = ConnectionManager.getConnection();
@@ -1158,11 +1082,11 @@ public class UserDAO {
 		try { // connect to DB
 			currentCon = ConnectionManager.getConnection();
 			stmt = currentCon.createStatement();
-			System.out.println("1 $$$$$$$$$$$$$$$$$$$$$");
+
 			int i = stmt.executeUpdate(otherQuery);
-			System.out.println("2 $$$$$$$$$$$$$$$$$$$$$");
+
 			int j = stmt.executeUpdate(searchQuery);
-			System.out.println("3 $$$$$$$$$$$$$$$$$$$$$");
+
 			// boolean more = rs.next(); // if user does not exist set the
 			// isValid
 			// variable to false
@@ -1210,7 +1134,7 @@ public class UserDAO {
 		Statement stmt = null;
 
 		int index = Integer.parseInt(bean.getProdIndex());
-		System.out.println("^%%%%$%$%$ IN Here userDAO update");
+
 		String[] arr = bean.getProdIDArrList();
 		String id = arr[index];
 
@@ -1222,7 +1146,7 @@ public class UserDAO {
 				+ "', PROD_SKU = '" + strVar2 + "', PROD_PRICE = '" + strVar3
 				+ "' WHERE PROD_ID = " + id;
 
-		System.out.println("Query: " + searchQuery);
+		// System.out.println("Query: " + searchQuery);
 
 		try { // connect to DB
 			currentCon = ConnectionManager.getConnection();
@@ -1321,7 +1245,7 @@ public class UserDAO {
 
 		String searchQuery = "DELETE FROM PRODUCTS WHERE PROD_ID = " + id;
 
-		System.out.println("Query: " + searchQuery);
+		// System.out.println("Query: " + searchQuery);
 
 		try { // connect to DB
 			currentCon = ConnectionManager.getConnection();

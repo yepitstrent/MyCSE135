@@ -23,7 +23,9 @@
 		<input type="submit" value="Go Back">
 	</form>
 
-	<h1>Add a new category</h1>
+	<h1>The "Categories" Page</h1>
+
+	<h3>Add a new category</h3>
 
 	<form action=LoginServlet>
 		Enter a New Category: <input type="text" name="catname" /><br>
@@ -33,7 +35,7 @@
 	</form>
 
 
-	<h1>Delete a non-empty category</h1>
+	<h3>Current Categories</h3>
 
 	<form action=LoginServlet>
 		<%

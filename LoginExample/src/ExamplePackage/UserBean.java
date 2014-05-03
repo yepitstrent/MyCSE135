@@ -171,7 +171,7 @@ public class UserBean {
 	}
 
 	public void setCatNameArrList(ArrayList<String> catNameArrList) {
-		System.out.println("SET CAT NAM LIST &&&&&&&&");
+
 		catNameList = catNameArrList.toArray(new String[catNameArrList.size()]);
 	}
 
@@ -319,44 +319,37 @@ public class UserBean {
 	}
 
 	public void setProdIndex(String index) {
-		System.out.println("Setting INDEX??????????" + index);
-		
+
 		prodIndex = index;
 	}
 
 	public String getProdIndex() {
-		System.out.println("GETTING INDEX!!!!!!!!" + prodIndex);
 		return prodIndex;
 	}
 
 	public void setProdNameArrList(String[] array) {
-		// TODO Auto-generated method stub
-		System.out.println("SET PROD NAME ARR LIST");
+
 		prodNameArray = array;
 	}
 
 	public void setProdIDArrList(String[] array) {
-		// TODO Auto-generated method stub
-		System.out.println("setting ID HERRE" + array[0]);
-		
+
 		prodIDArray = array.clone();
 	}
 
 	public void setProdDescArray(String[] array) {
-		// TODO Auto-generated method stub
 		prodDescArray = array.clone();
 	}
 
 	public String[] getProdIDArrList() {
 		// TODO Auto-generated method stub
-		System.out.println("getting ID HERE");
-		
+
 		return prodIDArray;
 	}
 
 	public String[] getProdNameArrList() {
 		// TODO Auto-generated method stub
-		System.out.println("IN PROD NAME ARR LIST");
+
 		return prodNameArray;
 	}
 
@@ -369,8 +362,8 @@ public class UserBean {
 		// TODO Auto-generated method stub
 		prodSKUArray = array;
 	}
-	public String[] getProdSKUArrList()
-	{
+
+	public String[] getProdSKUArrList() {
 		return prodSKUArray;
 	}
 
@@ -378,14 +371,12 @@ public class UserBean {
 		// TODO Auto-generated method stub
 		prodPriceArray = array;
 	}
-	
-	public void setConfirmation(String[] arr)
-	{
+
+	public void setConfirmation(String[] arr) {
 		confirmArr = arr.clone();
 	}
 
-	public String[] getConfirmation()
-	{
+	public String[] getConfirmation() {
 		return confirmArr;
 	}
 
@@ -417,36 +408,36 @@ public class UserBean {
 	public String getUpdateProdName() {
 		// TODO Auto-generated method stub
 		return updateProdName;
-		
+
 	}
 
 	public String getUpdateProdSKU() {
 		// TODO Auto-generated method stub
 		return updateProdSKU;
-		
+
 	}
 
 	public String getUpdateProdPrice() {
 		// TODO Auto-generated method stub
 		return updateProdPrice;
-		
+
 	}
-	
+
 	public void setUpdateProdName(String parameter) {
 		// TODO Auto-generated method stub
 		updateProdName = parameter;
-		
+
 	}
 
 	public void setUpdateProdSKU(String parameter) {
 		// TODO Auto-generated method stub
 		updateProdSKU = parameter;
-		
+
 	}
 
 	public void setUpdateProdPrice(String parameter) {
 		// TODO Auto-generated method stub
 		updateProdPrice = parameter;
-		
+
 	}
 }

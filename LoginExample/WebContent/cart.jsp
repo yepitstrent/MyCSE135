@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=windows-1256"
-	pageEncoding="windows-1256" import="ExamplePackage.UserBean"%>
+	pageEncoding="windows-1256" import="ExamplePackage.*"%>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
@@ -29,9 +29,9 @@
 		String[] prodNamCart = currentUser.getCartPric().clone();
 		String[] prodPriCart = currentUser.getCartProd().clone();
 		//currentUser.
-		System.out.println("GOT THE ARRAYS" + prodNamCart.length);
+		//System.out.println("GOT THE ARRAYS" + prodNamCart.length);
 		String[] nameBought = prodNamCart.clone();
-		System.out.println("HERERERERER??????");
+		//System.out.println("HERERERERER??????");
 		currentUser.setConfirmation(nameBought);
 	%>
 
@@ -50,6 +50,7 @@
 
 	Total (price of items in cart):
 	<%
+	    currentUser = UserDAO.getAllProducts(currentUser);
 		out.print(currentUser.getCartTotal());
 	%>
 	<form action=LoginServlet>

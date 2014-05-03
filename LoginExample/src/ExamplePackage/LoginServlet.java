@@ -9,6 +9,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.taglibs.standard.tag.el.core.OutTag;
+
 /**
  * Servlet implementation class LoginServlet
  */
@@ -32,6 +34,7 @@ public class LoginServlet extends HttpServlet {
 	 */
 	public void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, java.io.IOException {
+		
 		int test;
 		if (request.getParameter("st").equals("default")) {
 			test = -1;
@@ -41,17 +44,16 @@ public class LoginServlet extends HttpServlet {
 		switch (test) {
 		case 0:// Log in servlet
 		{
-			System.out.println("Login Servlet");
+			// System.out.println("Login Servlet");
 			try {
-				System.out.println("get un: " + request.getParameter("un")
-						+ " B4 dao.login");
+
 				user.setUserName(request.getParameter("un"));
 				user = UserDAO.login(user);
 
 				if (user.isValid()) {
 					session = request.getSession(true);
 					session.setAttribute("currentSessionUser", user);
-					System.out.println("B4 userlogged.jsp");
+
 					response.sendRedirect("userLogged.jsp");
 					// logged-in page
 				} else {
@@ -65,7 +67,7 @@ public class LoginServlet extends HttpServlet {
 		}// end case 0
 		case 1: // Sign up servlet
 		{
-			System.out.println("Signup Servlet");
+			// System.out.println("Signup Servlet");
 			try {
 
 				user.setUserName(request.getParameter("newUN"));
@@ -80,7 +82,7 @@ public class LoginServlet extends HttpServlet {
 					response.sendRedirect("userLogged.jsp");
 					// logged-in page
 				} else {
-					System.out.println("LoginServlet: 1");
+
 					response.sendRedirect("invalidSignup.jsp");
 				}
 				// error page
@@ -90,29 +92,20 @@ public class LoginServlet extends HttpServlet {
 			break;
 		}// end case 1
 		case 2: {
-			System.out.println("ProductOwner Servlet");
+			// System.out.println("ProductOwner Servlet");
 
 			try {
 				if (user.isValid()) {
 					user = UserDAO.setIDSignup(user);
-					System.out.println("AM I VALID");
-					/*
-					 * user.setCatID(request.getParameter("catname"));
-					 * user.setProdName(request.getParameter("prodname"));
-					 * user.setProdSKU( request.getParameter("prodsku") );
-					 * user.setProdPrice(request.getParameter("prodprice"));
-					 * user.setProdDesc( request.getParameter("proddesc") );
-					 * user = UserDAO.productOwner(user);
-					 */
+
 					user = UserDAO.getAllCategories(user);
 					user = UserDAO.getAllProducts(user);
 					session = request.getSession(true);
 					response.sendRedirect("productOwner.jsp");
-					System.out.println("#$#$#$#$AFTER METHODS CASE2");
 
 				} else {
 					// not loggedin, must not procede
-					System.out.println("LoginServlet: 2");
+
 					response.sendRedirect("invalidLogin.jsp");
 				}
 				// error page
@@ -122,10 +115,10 @@ public class LoginServlet extends HttpServlet {
 			break;
 		}
 		case 3: {
-			System.out.println("Add Product");
+			// System.out.println("Add Product");
 			try {
 				if (user.isValid()) {
-					System.out.println("AM I VALID");
+
 					user.setCatID(request.getParameter("catList"));
 					user.setProdName(request.getParameter("prodname"));
 					user.setProdSKU(request.getParameter("prodsku"));
@@ -136,7 +129,7 @@ public class LoginServlet extends HttpServlet {
 					response.sendRedirect("userLogged.jsp");
 					// logged-in page
 				} else {
-					System.out.println("LoginServlet: 3");
+					// System.out.println("LoginServlet: 3");
 					response.sendRedirect("invalidLogin.jsp");
 				}
 				// error page
@@ -147,18 +140,18 @@ public class LoginServlet extends HttpServlet {
 			break;
 		}
 		case 4: {
-			System.out.println("CategoryOwner Servlet");
+			// System.out.println("CategoryOwner Servlet");
 
 			try {
 				if (user.isValid()) {
-					System.out.println("AM I VALID");
+
 					user = UserDAO.getAllCategories(user);
 					session = request.getSession(true);
 					response.sendRedirect("categoryOwner.jsp");
 
 				} else {
 					// not loggedin, must not procede
-					System.out.println("LoginServlet: 4");
+					// System.out.println("LoginServlet: 4");
 					response.sendRedirect("invalidLogin.jsp");
 				}
 				// error page
@@ -168,10 +161,10 @@ public class LoginServlet extends HttpServlet {
 			break;
 		}
 		case 5: {
-			System.out.println("Add Category");
+			// System.out.println("Add Category");
 			try {
 				if (user.isValid()) {
-					System.out.println("AM I VALID");
+
 					user.setCatName(request.getParameter("catname"));
 					user.setCatDesc(request.getParameter("catdesc"));
 					// user = UserDAO.getAllCategories(user);
@@ -181,7 +174,7 @@ public class LoginServlet extends HttpServlet {
 					response.sendRedirect("userLogged.jsp");
 					// logged-in page
 				} else {
-					System.out.println("LoginServlet: 5");
+					// System.out.println("LoginServlet: 5");
 					response.sendRedirect("invalidLogin.jsp");
 				}
 				// error page
@@ -192,11 +185,11 @@ public class LoginServlet extends HttpServlet {
 		}
 
 		case 6: {
-			System.out.println("Delete Category");
+			// System.out.println("Delete Category");
 			try {
 				System.out.println("TOP OF DELETE");
 				if (user.isValid()) {
-					System.out.println("AM I VALID IN DELETE");
+
 					String index = request.getParameter("CatIndex");
 
 					user.setCatIndex(index);
@@ -207,7 +200,7 @@ public class LoginServlet extends HttpServlet {
 					response.sendRedirect("categoryOwner.jsp");
 					// logd-in page
 				} else {
-					System.out.println("LoginServlet: 5");
+					// System.out.println("LoginServlet: 5");
 					response.sendRedirect("invalidLogin.jsp");
 				}
 				// error page
@@ -217,26 +210,24 @@ public class LoginServlet extends HttpServlet {
 			break;
 		}
 		case 7: {
-			System.out.println("products browsing by partial string ");
+			// System.out.println("products browsing by partial string ");
 			// get all products by partial string
 
 			try {
 				if (user.isValid()) {
-					System.out.println("AM I VALID");
 
 					user.setProdSearchStr(request.getParameter("prodname"));
 					user.setProdCatSearchStr(request
 							.getParameter("catListForProdWithText"));
-					System.out.println("IN CASE7 "
-							+ request.getParameter("prodname"));
+
 					user = UserDAO.getProdFromString(user);
 					session = request.getSession(true);
 					user = UserDAO.getAllCategories(user);
-					System.out.println("B4 prod jsp");
+
 					response.sendRedirect("productsDisplay.jsp");
 					// logged-in page
 				} else {
-					System.out.println("LoginServlet: 7");
+					// System.out.println("LoginServlet: 7");
 					response.sendRedirect("invalidLogin.jsp");
 				}
 				// error page
@@ -246,24 +237,22 @@ public class LoginServlet extends HttpServlet {
 			break;
 		}
 		case 8: {
-			System.out.println("products browsing by Cat ID ");
+			// System.out.println("products browsing by Cat ID ");
 			// get all products by partial string
 
 			try {
 				if (user.isValid()) {
-					System.out.println("AM I VALID");
 
 					user.setProdSearchCat(request
 							.getParameter("catListForProd"));
-					System.out.println("IN CASE8 "
-							+ request.getParameter("catListForProd"));
+
 					user = UserDAO.getProdFromCat(user);
 					session = request.getSession(true);
 					user = UserDAO.getAllCategories(user);
 					response.sendRedirect("productsDisplay.jsp");
 					// logged-in page
 				} else {
-					System.out.println("LoginServlet: 8");
+					// System.out.println("LoginServlet: 8");
 					response.sendRedirect("invalidLogin.jsp");
 				}
 				// error page
@@ -274,14 +263,14 @@ public class LoginServlet extends HttpServlet {
 		}
 		case 9: {
 
-			System.out.println("in servlet case 9");
+			// System.out.println("in servlet case 9");
 			try {
 				if (user.isValid()) {
-					System.out.println("AM I VALID");
+
 					user = UserDAO.getCartTotal(user);
 					response.sendRedirect("cart.jsp");
 				} else {
-					System.out.println("LoginServlet: 9");
+					// System.out.println("LoginServlet: 9");
 					response.sendRedirect("invalidLogin.jsp");
 				}
 				// error page
@@ -291,25 +280,26 @@ public class LoginServlet extends HttpServlet {
 			break;
 		}
 		case 10: {
-			System.out.println("IN UPDATE CAT");
+			// System.out.println("IN UPDATE CAT");
 			try {
-				System.out.println("TOP OF update");
+
 				if (user.isValid()) {
-					System.out.println("AM I VALID IN update");
-					
+
 					String index = request.getParameter("CatIndex");
 
 					user.setCatIndex(index);
-					user.setUpdateCatName(request.getParameter("newname" + index));
-					user.setUpdateCatDesc(request.getParameter("newdesc" + index));
+					user.setUpdateCatName(request.getParameter("newname"
+							+ index));
+					user.setUpdateCatDesc(request.getParameter("newdesc"
+							+ index));
 					user = UserDAO.updateCatByID(user);
-					//user = UserDAO.deleteCatByID(user);
+					// user = UserDAO.deleteCatByID(user);
 					session = request.getSession(true);
 					user = UserDAO.getAllCategories(user);
 					response.sendRedirect("categoryOwner.jsp");
 					// logd-in page
 				} else {
-					System.out.println("LoginServlet: 5");
+					// System.out.println("LoginServlet: 5");
 					response.sendRedirect("invalidLogin.jsp");
 				}
 				// error page
@@ -319,7 +309,7 @@ public class LoginServlet extends HttpServlet {
 			break;
 		}
 		case 11: {
-			System.out.println("IN CASE 11: ADD PRODUCT TO CART");
+			// System.out.println("IN CASE 11: ADD PRODUCT TO CART");
 			try {
 
 				if (user.isValid()) {
@@ -331,7 +321,7 @@ public class LoginServlet extends HttpServlet {
 
 					response.sendRedirect("productsDisplay.jsp");
 				} else {
-					System.out.println("LoginServlet: 9");
+					// System.out.println("LoginServlet: 9");
 					response.sendRedirect("invalidLogin.jsp");
 				}
 			} catch (Throwable theException) {
@@ -341,19 +331,16 @@ public class LoginServlet extends HttpServlet {
 			// look at delete cat
 		}
 		case 12: {
-			System.out.println("CHECK OUT");
+			// System.out.println("CHECK OUT");
 			try {
 
 				if (user.isValid()) {
-					// String index = request.getParameter("prodIndex");
-					// user.setProdIndex(index);
-					// user = UserDAO.getAllProducts(user);
-					// user = UserDAO.getCartTotal(user);
+
 					user = UserDAO.checkOut(user);
 
 					response.sendRedirect("confirmation.jsp");
 				} else {
-					System.out.println("LoginServlet: 12");
+					// System.out.println("LoginServlet: 12");
 					response.sendRedirect("invalidLogin.jsp");
 				}
 			} catch (Throwable theException) {
@@ -361,32 +348,30 @@ public class LoginServlet extends HttpServlet {
 			}
 			break;
 		}
-		case 13:
-		{
-			System.out.println("CASE 13: UPDATE PROD");
+		case 13: {
+			// System.out.println("CASE 13: UPDATE PROD");
 			try {
-				
+
 				if (user.isValid()) {
-					System.out.println("AM I VALID IN update");
-					
+
 					String index = request.getParameter("prodIndex");
 
-					
 					user.setProdIndex(index);
-					user.setUpdateProdName(request.getParameter("newProdname" + index));
-					user.setUpdateProdSKU(request.getParameter("newProdSKU" + index));
-					user.setUpdateProdPrice(request.getParameter("newProdPrice" + index));
+					user.setUpdateProdName(request.getParameter("newProdname"
+							+ index));
+					user.setUpdateProdSKU(request.getParameter("newProdSKU"
+							+ index));
+					user.setUpdateProdPrice(request.getParameter("newProdPrice"
+							+ index));
 					user = UserDAO.updateProdByID(user);
 					user = UserDAO.getAllProducts(user);
-					System.out.println("DOOOOOO %^%$&^%&^");
-					//user = UserDAO.updateCatByID(user);
-					//user = UserDAO.deleteCatByID(user);
+
 					session = request.getSession(true);
 					user = UserDAO.getAllCategories(user);
 					response.sendRedirect("productOwner.jsp");
 					// logd-in page
 				} else {
-					System.out.println("LoginServlet: 5");
+					// System.out.println("LoginServlet: 5");
 					response.sendRedirect("invalidLogin.jsp");
 				}
 				// error page
@@ -395,13 +380,12 @@ public class LoginServlet extends HttpServlet {
 			}
 			break;
 		}
-		case 14:
-		{
-			System.out.println("CASE 14: REMOVE PROD");
+		case 14: {
+			// System.out.println("CASE 14: REMOVE PROD");
 			try {
-				System.out.println("TOP OF DELETE");
+				// System.out.println("TOP OF DELETE");
 				if (user.isValid()) {
-					System.out.println("AM I VALID IN DELETE");
+
 					String index = request.getParameter("ProdIndex");
 
 					user.setProdIndex(index);
@@ -413,7 +397,7 @@ public class LoginServlet extends HttpServlet {
 					response.sendRedirect("productOwner.jsp");
 					// logd-in page
 				} else {
-					System.out.println("LoginServlet: 14");
+					// System.out.println("LoginServlet: 14");
 					response.sendRedirect("invalidLogin.jsp");
 				}
 				// error page
@@ -423,7 +407,7 @@ public class LoginServlet extends HttpServlet {
 			break;
 		}
 		default: {
-			System.out.println("DEFAULT");
+			// System.out.println("DEFAULT");
 			user.setValid(false);
 			response.sendRedirect("LoginPage.jsp");
 		}// end default

@@ -12,9 +12,9 @@
 <body>
 	<form action="LoginServlet">
 		<h1>Log In With Your User Name</h1>
-		Please enter your username: <input type="text" name="un" /><br> <input
-			type="submit" value="Login"> <input type="hidden" name="st"
-			value="0">
+		Please enter your username: <input type="text" name="un" /><br>
+		<input type="submit" value="Login"> <input type="hidden"
+			name="st" value="0">
 	</form>
 	<br>
 

@@ -13,7 +13,6 @@ public class ConnectionManager {
 			// assuming "DataSource" is your DataSource name
 
 			Class.forName("org.postgresql.Driver");
-			System.out.println("AM I HERE?");
 			try {
 				// con = DriverManager.getConnection(url,"username","password");
 				con = DriverManager.getConnection(
@@ -25,7 +24,7 @@ public class ConnectionManager {
 				ex.printStackTrace();
 			}
 		} catch (ClassNotFoundException e) {
-			System.out.println("here");
+			
 			System.out.println(e);
 		}
 		return con;
